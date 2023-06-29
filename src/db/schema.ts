@@ -3,6 +3,7 @@ import {
   boolean,
   pgEnum,
   pgTable,
+  primaryKey,
   real,
   smallint,
   text,
@@ -18,13 +19,14 @@ export const transaction = pgTable("transaction", {
   categoryUUID: uuid("category_uuid")
     .notNull()
     .references(() => category.uuid),
+  budgetUUID: uuid("category_uuid").references(() => category.uuid),
   plannedTransactionUUID: uuid("planned_transaction_uuid").references(
     () => plannedTransaction.uuid
   ),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const transactionRelations = relations(transaction, ({ one }) => ({
+export const transactionRelations = relations(transaction, ({ one, many }) => ({
   category: one(category, {
     fields: [transaction.categoryUUID],
     references: [category.uuid],
@@ -33,6 +35,11 @@ export const transactionRelations = relations(transaction, ({ one }) => ({
     fields: [transaction.plannedTransactionUUID],
     references: [plannedTransaction.uuid],
   }),
+  budget: one(budget, {
+    fields: [transaction.budgetUUID],
+    references: [budget.uuid],
+  }),
+  labelToTransaction: many(labelToTransaction),
 }));
 
 export const categoryTypeEnum = pgEnum("type", ["income", "expense", "either"]);
@@ -68,6 +75,58 @@ export const plannedTransactionRelations = relations(
   })
 );
 
+export const budget = pgTable("budget", {
+  uuid: uuid("uuid").defaultRandom().notNull().primaryKey(),
+  title: text("title").notNull(),
+  size: real("size").default(0.0).notNull(),
+  spent: real("spent").default(0.0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const budgetRelations = relations(budget, ({ many }) => ({
+  transaction: many(transaction),
+}));
+
+export const label = pgTable("label", {
+  uuid: uuid("uuid").defaultRandom().notNull().primaryKey(),
+  title: text("title").notNull(),
+});
+
+export const labelRelations = relations(label, ({ many }) => ({
+  labelToTransaction: many(labelToTransaction),
+}));
+
+export const labelToTransaction = pgTable(
+  "label_to_transaction",
+  {
+    labelUUID: uuid("label_id")
+      .notNull()
+      .references(() => label.uuid),
+    transactionUUID: uuid("transaction_uuid")
+      .notNull()
+      .references(() => transaction.uuid),
+  },
+  (t) => ({
+    pk: primaryKey(t.labelUUID, t.transactionUUID),
+  })
+);
+
+export const labelToTransactionRelations = relations(
+  labelToTransaction,
+  ({ one }) => ({
+    label: one(label, {
+      fields: [labelToTransaction.labelUUID],
+      references: [label.uuid],
+    }),
+    transaction: one(transaction, {
+      fields: [labelToTransaction.transactionUUID],
+      references: [transaction.uuid],
+    }),
+  })
+);
+
 export type Transaction = InferModel<typeof transaction>;
 export type Category = InferModel<typeof category>;
 export type PlannedTransaction = InferModel<typeof plannedTransaction>;
+export type Budget = InferModel<typeof budget>;
+export type Label = InferModel<typeof label>;

@@ -1,14 +1,11 @@
 // migrate.ts
-import { config } from "dotenv";
+import { env } from "@/env.mjs";
+import { drizzle } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
-import { drizzle } from "drizzle-orm/postgres-js";
-import { env } from "@/env.mjs";
-
-config({ path: ".dev.vars" });
 
 const databaseUrl = drizzle(
-  postgres(`${env.DATABASE_URL}`, { ssl: "require", max: 1 })
+  postgres(env.DATABASE_URL, { ssl: "require", max: 1 })
 );
 
 const main = async () => {
