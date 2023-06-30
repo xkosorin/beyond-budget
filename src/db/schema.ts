@@ -1,6 +1,7 @@
 import { InferModel, relations } from "drizzle-orm";
 import {
   boolean,
+  date,
   pgEnum,
   pgTable,
   primaryKey,
@@ -62,6 +63,7 @@ export const plannedTransaction = pgTable("planned_transaction", {
   isExpense: boolean("is_expense").default(true).notNull(),
   frequecny: smallint("frequency").default(1).notNull(),
   occurrencesThisMonth: smallint("occurrences_this_month").default(0).notNull(),
+  dueDate: date("due_date"),
   paid: boolean("is_paid").default(false).notNull(),
   title: text("title").notNull(),
   categoryUUID: uuid("category_uuid").notNull(),
