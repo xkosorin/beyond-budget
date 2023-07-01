@@ -113,7 +113,7 @@ const AddTransactionForm: React.FC = () => {
                       }}
                       className="px-4 rounded-s-md rounded-e-none"
                     >
-                      {field.value ? "-" : "+"}
+                      {isExpense ? "-" : "+"}
                     </Toggle>
                   </FormControl>
                   <FormMessage />
@@ -128,11 +128,12 @@ const AddTransactionForm: React.FC = () => {
                   <FormControl>
                     <Input
                       type="number"
-                      min={0}
+                      pattern="[0-9]+([\.,][0-9]+)?"
+                      step="0.01"
                       className="rounded-s-none"
                       {...form.register("amount", {
                         setValueAs: (v) =>
-                          v === "" ? undefined : parseInt(v, 10),
+                          v === "" ? undefined : parseFloat(v),
                       })}
                     />
                   </FormControl>
@@ -189,6 +190,7 @@ const AddTransactionForm: React.FC = () => {
                         <FormControl>
                           <Input
                             type="date"
+                            disabled={!isPlanned}
                             {...form.register(
                               "expenseSchema.plannedSchema.dueDate",
                               {
