@@ -1,5 +1,6 @@
 "use client";
 
+import { addTransactionAction } from "@/app/_actions/transaction";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,13 +22,13 @@ import {
 } from "@/components/ui/select";
 import { Toggle } from "@/components/ui/toggle";
 import { transactionSchema } from "@/lib/validations/transaction";
+import { CategorySelect } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Switch } from "../ui/switch";
-import { CategorySelect } from "@/types";
-import { addTransactionAction } from "@/app/_actions/transaction";
 import { useToast } from "../ui/use-toast";
 
 type Inputs = z.infer<typeof transactionSchema>;
@@ -43,6 +44,7 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
   const [isPending, startTransition] = useTransition();
 
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<Inputs>({
     resolver: zodResolver(transactionSchema),
@@ -65,6 +67,10 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
         toast({ title: "Transaction added successfully." });
 
         form.reset();
+        router.push(`/`);
+
+        const closeButton = document.getElementById("close-dialog");
+        if (closeButton) closeButton.click();
       } catch (error) {
         error instanceof Error
           ? toast({ title: error.message })

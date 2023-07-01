@@ -11,7 +11,7 @@ export default async function AddTransaction() {
     .from(category);
 
   return (
-    <ScrollArea className="">
+    <ScrollArea>
       <AddTransactionForm categories={categories} />
     </ScrollArea>
   );
