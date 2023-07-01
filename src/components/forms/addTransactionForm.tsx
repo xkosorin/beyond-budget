@@ -8,7 +8,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  UncontrolledFormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -22,30 +21,30 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Toggle } from "@/components/ui/toggle";
-import { addTransaction } from "@/lib/validations/transaction";
+import { transactionSchema } from "@/lib/validations/transaction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Switch } from "../ui/switch";
 
+type Inputs = z.infer<typeof transactionSchema>;
+
 const AddTransactionForm: React.FC = () => {
   const [isExpense, setIsExpense] = useState(true);
   const [isPlanned, setIsPlanned] = useState(false);
   const [isRecurring, setIsRecurring] = useState(false);
 
-  const form = useForm<z.infer<typeof addTransaction>>({
-    resolver: zodResolver(addTransaction),
+  const form = useForm<Inputs>({
+    resolver: zodResolver(transactionSchema),
     defaultValues: {
-      isExpense: true,
-      amount: undefined,
-      isPlanned: false,
-      isRecurring: false,
+      amount: 0,
+      title: "",
     },
   });
 
-  const onSubmit = () => {
-    console.log("lol");
+  const onSubmit = (data: Inputs) => {
+    console.log(data);
   };
 
   return (
@@ -83,7 +82,10 @@ const AddTransactionForm: React.FC = () => {
                                 {cat.title}
                               </SelectItem>
                             ))} */}
-                        <SelectItem value={"1"} key={1}>
+                        <SelectItem
+                          value={"6a871854-d594-46f7-a912-f3ebe633a960"}
+                          key={1}
+                        >
                           {"Lol"}
                         </SelectItem>
                       </SelectGroup>
@@ -98,13 +100,13 @@ const AddTransactionForm: React.FC = () => {
           <div className="flex flex-row pt-2">
             <FormField
               control={form.control}
-              name="isExpense"
+              name="expenseSchema.isExpense"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Toggle
                       variant="outline"
-                      defaultPressed={!field.value}
+                      defaultPressed={true}
                       onPressedChange={(event) => {
                         field.onChange(event);
                         setIsExpense(event);
@@ -118,39 +120,47 @@ const AddTransactionForm: React.FC = () => {
                 </FormItem>
               )}
             />
-            <FormItem>
-              <FormControl>
-                <Input
-                  aria-invalid={!!form.formState.errors.title}
-                  placeholder="Transaction title."
-                  {...form.register("title")}
-                />
-              </FormControl>
-              <UncontrolledFormMessage
-                message={form.formState.errors.title?.message}
-              />
-            </FormItem>
-          </div>
-          <FormItem>
-            <FormLabel>Name</FormLabel>
-            <FormControl>
-              <Input
-                aria-invalid={!!form.formState.errors.title}
-                placeholder="Transaction title."
-                {...form.register("title")}
-              />
-            </FormControl>
-            <UncontrolledFormMessage
-              message={form.formState.errors.title?.message}
+            <FormField
+              control={form.control}
+              name="amount"
+              render={() => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min={0}
+                      className="rounded-s-none"
+                      {...form.register("amount", {
+                        setValueAs: (v) =>
+                          v === "" ? undefined : parseInt(v, 10),
+                      })}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </FormItem>
+          </div>
+          <FormField
+            control={form.control}
+            name="title"
+            render={() => (
+              <FormItem className="py-2 w-full">
+                <FormLabel form="title">Title</FormLabel>
+                <FormControl>
+                  <Input {...form.register("title")} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           {isExpense && (
             <>
               <div className="flex flex-col">
                 <div className="flex items-center justify-between gap-2">
                   <FormField
                     control={form.control}
-                    name="isPlanned"
+                    name="expenseSchema.plannedSchema.isPlanned"
                     render={({ field }) => (
                       <FormItem className="flex items-center justify-start py-2 mt-6">
                         <FormLabel className="mt-2 min-w-[90px]">
@@ -170,25 +180,33 @@ const AddTransactionForm: React.FC = () => {
                       </FormItem>
                     )}
                   />
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        aria-invalid={!!form.formState.errors.title}
-                        placeholder=""
-                        type="date"
-                        {...form.register("dueDate")}
-                      />
-                    </FormControl>
-                    <UncontrolledFormMessage
-                      message={form.formState.errors.title?.message}
-                    />
-                  </FormItem>
+                  <FormField
+                    control={form.control}
+                    name="expenseSchema.plannedSchema.dueDate"
+                    render={() => (
+                      <FormItem className="py-2 w-9/12">
+                        <FormLabel form="dueDate">Due Date</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="date"
+                            {...form.register(
+                              "expenseSchema.plannedSchema.dueDate",
+                              {
+                                setValueAs: (v) =>
+                                  v === "" ? undefined : new Date(v),
+                              }
+                            )}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div className="flex items-center justify-between gap-2">
                   <FormField
                     control={form.control}
-                    name="isRecurring"
+                    name="expenseSchema.recurringSchema.isRecurring"
                     render={({ field }) => (
                       <FormItem className="flex items-center justify-start py-2 mt-6">
                         <FormLabel className="mt-2 min-w-[90px]">
@@ -211,7 +229,7 @@ const AddTransactionForm: React.FC = () => {
                   />
                   <FormField
                     control={form.control}
-                    name="frequency"
+                    name="expenseSchema.recurringSchema.frequency"
                     render={({ field }) => (
                       <FormItem className="py-2 w-9/12">
                         <FormLabel form="frequency">
