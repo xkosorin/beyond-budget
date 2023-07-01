@@ -15,6 +15,13 @@
       "when": 1688051918649,
       "tag": "0001_common_wolfpack",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1688227869650,
+      "tag": "0002_free_absorbing_man",
+      "breakpoints": true
     }
   ]
 }

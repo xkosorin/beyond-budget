@@ -1,0 +1,1 @@
+ALTER TABLE "planned_transaction" ADD COLUMN "due_date" date;
