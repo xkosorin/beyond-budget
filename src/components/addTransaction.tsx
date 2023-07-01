@@ -1,4 +1,4 @@
-import "server-only";
+"use server";
 
 import AddTransactionForm from "@/components/forms/addTransactionForm";
 import { db } from "@/db";
@@ -11,7 +11,7 @@ export default async function AddTransaction() {
     .from(category);
 
   return (
-    <ScrollArea className="h-[calc(100vh_-_150px)] max-h-[500px]">
+    <ScrollArea className="">
       <AddTransactionForm categories={categories} />
     </ScrollArea>
   );

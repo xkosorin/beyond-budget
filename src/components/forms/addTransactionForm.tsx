@@ -22,11 +22,13 @@ import {
 import { Toggle } from "@/components/ui/toggle";
 import { transactionSchema } from "@/lib/validations/transaction";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Switch } from "../ui/switch";
 import { CategorySelect } from "@/types";
+import { addTransactionAction } from "@/app/_actions/transaction";
+import { useToast } from "../ui/use-toast";
 
 type Inputs = z.infer<typeof transactionSchema>;
 
@@ -38,6 +40,9 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
   const [isExpense, setIsExpense] = useState(true);
   const [isPlanned, setIsPlanned] = useState(false);
   const [isRecurring, setIsRecurring] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  const { toast } = useToast();
 
   const form = useForm<Inputs>({
     resolver: zodResolver(transactionSchema),
@@ -49,12 +54,29 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
 
   const onSubmit = (data: Inputs) => {
     console.log(data);
+
+    startTransition(async () => {
+      try {
+        // Add product to the store
+        await addTransactionAction({
+          ...data,
+        });
+
+        toast({ title: "Transaction added successfully." });
+
+        form.reset();
+      } catch (error) {
+        error instanceof Error
+          ? toast({ title: error.message })
+          : toast({ title: "Something went wrong, please try again." });
+      }
+    });
   };
 
   return (
     <Form {...form}>
       <form
-        className="flex flex-col group"
+        className="flex flex-col group p-[1px]"
         onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
       >
         <FormField
@@ -238,21 +260,25 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
                 <FormField
                   control={form.control}
                   name="expenseSchema.recurringSchema.frequency"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem className="py-2 w-9/12">
                       <FormLabel form="frequency">
                         Occurrences per month
                       </FormLabel>
                       <FormControl>
                         <Input
-                          id="frequency"
                           type="number"
                           step="1"
                           min={1}
                           max={31}
-                          value={field.value}
                           disabled={!isRecurring}
-                          onChange={(event) => field.onChange(event)}
+                          {...form.register(
+                            "expenseSchema.recurringSchema.frequency",
+                            {
+                              setValueAs: (v) =>
+                                v === "" ? undefined : parseInt(v),
+                            }
+                          )}
                         />
                       </FormControl>
                       <FormMessage />
@@ -263,8 +289,8 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
             </div>
           </>
         )}
-        <Button type="submit" className="mt-4">
-          Save
+        <Button type="submit" className="mt-4" disabled={isPending}>
+          Save transaction
         </Button>
       </form>
     </Form>

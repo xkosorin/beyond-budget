@@ -19,7 +19,7 @@ const plannedSchema = z
 const recurringSchema = z
   .object({
     isRecurring: z.boolean().default(false),
-    frequency: z.number().max(31).min(1).optional(),
+    frequency: z.number().max(31).min(1).optional().default(1),
   })
   .refine((data) => {
     if (data.isRecurring === true) {
@@ -53,25 +53,3 @@ export const transactionSchema = z.object({
   title: z.string(),
   expenseSchema: expenseSchema.optional(),
 });
-
-/* export const addTransaction = z.discriminatedUnion("isExpense", [
-  z
-    .object({
-      isExpense: z.literal(true),
-      plannedTransactionUUID: z.string().optional(),
-      isPlanned: z.boolean().optional(),
-      isRecurring: z.boolean().optional(),
-      frequency: z.number().max(31).min(1).optional(),
-      dueDate: z.date().min(new Date()).optional(),
-    })
-    .merge(baseAddSchema),
-  z
-    .object({
-      isExpense: z.literal(false),
-      isPlanned: z.boolean(),
-      isRecurring: z.boolean(),
-      frequency: z.number().max(31).min(1).optional(),
-      dueDate: z.date().min(new Date()).optional(),
-    })
-    .merge(baseAddSchema),
-]); */
