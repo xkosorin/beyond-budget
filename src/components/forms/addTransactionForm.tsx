@@ -55,8 +55,6 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
   });
 
   const onSubmit = (data: Inputs) => {
-    console.log(data);
-
     startTransition(async () => {
       try {
         // Add product to the store

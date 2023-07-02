@@ -53,3 +53,7 @@ export const transactionSchema = z.object({
   title: z.string(),
   expenseSchema: expenseSchema.optional(),
 });
+
+export const getTransactionSchema = z.object({
+  uuid: z.string().regex(uuidRegex, "Invalid UUID format"),
+});

@@ -2,7 +2,11 @@
 
 import { db } from "@/db";
 import { plannedTransaction, transaction } from "@/db/schema";
-import { transactionSchema } from "@/lib/validations/transaction";
+import {
+  getTransactionSchema,
+  transactionSchema,
+} from "@/lib/validations/transaction";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -43,4 +47,10 @@ export async function addTransactionAction(
   revalidatePath(`/`);
 }
 
-export async function getTransactions() {}
+export async function deleteTransaction(
+  input: z.infer<typeof getTransactionSchema>
+) {
+  await db.delete(transaction).where(eq(transaction.uuid, input.uuid));
+
+  revalidatePath(`/`);
+}

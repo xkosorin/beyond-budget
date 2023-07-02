@@ -1,6 +1,7 @@
 import { CategoryType } from "@/db/schema";
 import { TransactionWithCategory } from "@/types";
 import Image from "next/image";
+import TransactionOptions from "./transactionOptions";
 
 type Props = {
   transaction: TransactionWithCategory;
@@ -43,13 +44,9 @@ const Transaction = ({ transaction, planned }: Props) => {
           Number(transaction.transaction.amount).toFixed(2) +
           " €"}
       </div>
-      {/*       <div className="w-fit">
-        <TransactionOptions
-          transaction={transaction}
-          planned={planned}
-          onDelete={onDelete}
-        />
-      </div> */}
+      <div className="w-fit">
+        <TransactionOptions forTransaction={transaction.transaction.uuid} />
+      </div>
     </div>
   );
 };
