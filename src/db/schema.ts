@@ -127,8 +127,8 @@ export const labelToTransactionRelations = relations(
   })
 );
 
-export type Transaction = InferModel<typeof transaction>;
-export type Category = InferModel<typeof category>;
-export type PlannedTransaction = InferModel<typeof plannedTransaction>;
-export type Budget = InferModel<typeof budget>;
-export type Label = InferModel<typeof label>;
+export type TransactionType = InferModel<typeof transaction>;
+export type CategoryType = InferModel<typeof category>;
+export type PlannedTransactionType = InferModel<typeof plannedTransaction>;
+export type BudgetType = InferModel<typeof budget>;
+export type LabelType = InferModel<typeof label>;
