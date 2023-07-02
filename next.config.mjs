@@ -5,6 +5,14 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.icons8.com",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
