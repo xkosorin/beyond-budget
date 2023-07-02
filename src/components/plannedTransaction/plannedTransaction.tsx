@@ -1,16 +1,15 @@
+import TransactionOptions from "@/components/transactionOptions";
 import { CategoryType } from "@/db/schema";
-import { TransactionWithCategory } from "@/types";
+import { PlannedTransactionWithCategory } from "@/types";
+import { format } from "date-fns";
 import Image from "next/image";
-import TransactionOptions from "./transactionOptions";
 
 type Props = {
-  transaction: TransactionWithCategory;
-  occurencies?: number;
+  transaction: PlannedTransactionWithCategory;
   category?: CategoryType;
-  planned: boolean;
 };
 
-const Transaction = ({ transaction, planned }: Props) => {
+const PlannedTransaction = ({ transaction }: Props) => {
   return (
     <div className="flex w-full flex-row items-center justify-between py-2">
       <div className="w-fit flex-shrink-0 pr-5">
@@ -26,29 +25,25 @@ const Transaction = ({ transaction, planned }: Props) => {
       </div>
       <div className="flex min-w-0 flex-grow flex-col">
         <div className=" flex-shrink-0 gap-2 truncate align-middle">
-          {transaction.transaction.title}
+          {transaction.planned_transaction.title}
         </div>
-        {/*         {!planned && (
-          <div className="text-[10px] text-[#ededed]">
-            {format(new Date(transaction.createdAt), "PPPP")}
-          </div>
-        )} */}
       </div>
-      {/*       {transaction.frequency && (
-        <div className="px-1 md:px-4 text-sm md:text-base md:font-bold whitespace-nowrap">
-          {occurencies + "x"}
-        </div>
-      )} */}
+      <div className="whitespace-nowrap px-1 text-sm md:px-4 md:text-base md:font-bold">
+        {transaction.planned_transaction.frequecny + "x"}
+      </div>
       <div className="ml-auto w-fit min-w-[80px] whitespace-nowrap px-1 text-right text-sm font-bold md:px-4 md:text-base xl:min-w-[120px]">
-        {(transaction.transaction.isExpense ? "- " : "+  ") +
-          Number(transaction.transaction.amount).toFixed(2) +
+        {(transaction.planned_transaction.isExpense ? "- " : "+  ") +
+          Number(transaction.planned_transaction.amount).toFixed(2) +
           " €"}
       </div>
       <div className="w-fit">
-        <TransactionOptions forTransaction={transaction.transaction.uuid} />
+        <TransactionOptions
+          forTransaction={transaction.planned_transaction.uuid}
+          planned={true}
+        />
       </div>
     </div>
   );
 };
 
-export default Transaction;
+export default PlannedTransaction;

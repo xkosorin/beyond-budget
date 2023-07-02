@@ -19,9 +19,10 @@ import { PopoverTrigger } from "@/components/ui/popover";
 
 type Props = {
   uuid: string;
+  isPlannedTransaction: boolean;
 };
 
-const DeleteTransactionAlert = ({ uuid }: Props) => {
+const DeleteTransactionAlert = ({ uuid, isPlannedTransaction }: Props) => {
   const [isPending, startTransition] = useTransition();
 
   const { toast } = useToast();
@@ -29,7 +30,7 @@ const DeleteTransactionAlert = ({ uuid }: Props) => {
   const handleClick = () => {
     startTransition(async () => {
       try {
-        await deleteTransaction({ uuid });
+        await deleteTransaction({ uuid, isPlannedTransaction });
         toast({ title: "Transaction deleted successfully." });
       } catch (error) {
         error instanceof Error

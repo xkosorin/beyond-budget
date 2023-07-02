@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { boolean, z } from "zod";
 
 const uuidRegex =
   /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
@@ -6,7 +6,7 @@ const uuidRegex =
 const plannedSchema = z
   .object({
     isPlanned: z.boolean().default(false),
-    dueDate: z.date().min(new Date()).optional(),
+    dueDate: z.date().min(new Date()).optional().default(new Date()),
   })
   .refine((data) => {
     if (data.isPlanned === true) {
@@ -56,4 +56,5 @@ export const transactionSchema = z.object({
 
 export const getTransactionSchema = z.object({
   uuid: z.string().regex(uuidRegex, "Invalid UUID format"),
+  isPlannedTransaction: z.boolean(),
 });

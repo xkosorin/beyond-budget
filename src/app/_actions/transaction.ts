@@ -50,7 +50,13 @@ export async function addTransactionAction(
 export async function deleteTransaction(
   input: z.infer<typeof getTransactionSchema>
 ) {
-  await db.delete(transaction).where(eq(transaction.uuid, input.uuid));
+  if (input.isPlannedTransaction) {
+    await db
+      .delete(plannedTransaction)
+      .where(eq(plannedTransaction.uuid, input.uuid));
+  } else {
+    await db.delete(transaction).where(eq(transaction.uuid, input.uuid));
+  }
 
   revalidatePath(`/`);
 }

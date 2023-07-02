@@ -4,13 +4,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import DeleteTransactionAlert from "./deleteTransactionAlert";
+import DeleteTransactionAlert from "@/components/deleteTransactionAlert";
 
 type Props = {
   forTransaction: string;
+  planned: boolean;
 };
 
-const TransactionOptions = ({ forTransaction }: Props) => {
+const TransactionOptions = ({ forTransaction, planned }: Props) => {
   return (
     <Popover>
       <PopoverTrigger>
@@ -29,10 +30,10 @@ const TransactionOptions = ({ forTransaction }: Props) => {
           </>
         ) : (
           <EditTransactionDialog id={transaction.id} />
-        )}
- */}
+        )} */}
         <DeleteTransactionAlert
           uuid={forTransaction}
+          isPlannedTransaction={planned}
         />
       </PopoverContent>
     </Popover>
