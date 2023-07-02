@@ -1,9 +1,9 @@
 "use server";
 
 import AddTransactionForm from "@/components/forms/addTransactionForm";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { db } from "@/db";
 import { category } from "@/db/schema";
-import { ScrollArea } from "./ui/scroll-area";
 
 const AddTransaction = async () => {
   const categories = await db
@@ -15,6 +15,6 @@ const AddTransaction = async () => {
       <AddTransactionForm categories={categories} />
     </ScrollArea>
   );
-}
+};
 
 export default AddTransaction;
