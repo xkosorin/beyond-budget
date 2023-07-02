@@ -1,8 +1,9 @@
 "use server";
 
-import Transaction from "./transaction";
+import { Separator } from "@/components/ui/separator";
 import { TransactionWithCategory } from "@/types";
 import { format } from "date-fns";
+import Transaction from "./transaction";
 
 type Props = {
   transactions: TransactionWithCategory[];
@@ -16,12 +17,15 @@ const TransactionGroup = ({ transactions, date }: Props) => {
         <div className="self-start text-xs">
           {format(new Date(date), "PPPP")}
         </div>
-        {transactions.map((t) => (
-          <Transaction
-            key={t.transaction.uuid}
-            transaction={t}
-            planned={false}
-          />
+        {transactions.map((t, idx, arr) => (
+          <>
+            <Transaction
+              key={t.transaction.uuid}
+              transaction={t}
+              planned={false}
+            />
+            {idx !== arr.length - 1 && <Separator />}
+          </>
         ))}
       </div>
     </>

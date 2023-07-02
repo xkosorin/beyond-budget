@@ -1,4 +1,3 @@
-
 import {
   Popover,
   PopoverContent,
@@ -15,14 +14,10 @@ const TransactionOptions = ({ forTransaction }: Props) => {
   return (
     <Popover>
       <PopoverTrigger>
-        <ChevronDownIcon
-          style={{
-            color: "#ffffff35",
-          }}
-        />
+        <ChevronDownIcon />
       </PopoverTrigger>
       <PopoverContent
-        className="flex flex-col border-primary p-1"
+        className="flex flex-col border p-1"
         side="bottom"
         align="end"
       >
@@ -36,7 +31,9 @@ const TransactionOptions = ({ forTransaction }: Props) => {
           <EditTransactionDialog id={transaction.id} />
         )}
  */}
-        <DeleteTransactionAlert uuid={forTransaction} />
+        <DeleteTransactionAlert
+          uuid={forTransaction}
+        />
       </PopoverContent>
     </Popover>
   );

@@ -15,6 +15,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { useTransition } from "react";
+import { PopoverTrigger } from "@/components/ui/popover";
 
 type Props = {
   uuid: string;
@@ -40,7 +41,7 @@ const DeleteTransactionAlert = ({ uuid }: Props) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="text-EMred inline-flex h-8 items-center justify-start px-1 text-sm font-medium underline-offset-4 hover:underline">
+      <AlertDialogTrigger className="inline-flex h-8 items-center justify-start px-1 text-sm font-medium underline-offset-4 hover:underline">
         <TrashIcon />
         Delete
       </AlertDialogTrigger>
@@ -48,15 +49,19 @@ const DeleteTransactionAlert = ({ uuid }: Props) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            This action cannot be undone. This will permanently delete the
+            transaction.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleClick} disabled={isPending}>
-            Delete
-          </AlertDialogAction>
+          <PopoverTrigger asChild>
+            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+          </PopoverTrigger>
+          <PopoverTrigger asChild>
+            <AlertDialogAction onClick={handleClick} disabled={isPending}>
+              Delete
+            </AlertDialogAction>
+          </PopoverTrigger>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
