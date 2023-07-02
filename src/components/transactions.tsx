@@ -29,10 +29,19 @@ const Transactions = async () => {
   }, {});
 
   return (
-    <div className="flex flex-col gap-2">
-      {Object.entries(groupedByDate).map(([date, transactions]) => (
-        <TransactionGroup key={date} date={date} transactions={transactions} />
-      ))}
+    <div className="max-w-[calc(100vw_-_16px)] md:max-w-none">
+      <div className="scroll-m-20 text-2xl font-semibold tracking-tight">
+        Transactions
+      </div>
+      <div className="no-scrollbar flex max-h-[290px] flex-col gap-2 overflow-y-auto md:max-h-[calc(100vh_-_150px)]">
+        {Object.entries(groupedByDate).map(([date, transactions]) => (
+          <TransactionGroup
+            key={date}
+            date={date}
+            transactions={transactions}
+          />
+        ))}
+      </div>
     </div>
   );
 };

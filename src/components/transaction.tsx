@@ -12,7 +12,7 @@ type Props = {
 const Transaction = ({ transaction, planned }: Props) => {
   return (
     <div className="flex w-full flex-row items-center justify-between py-2">
-      <div className="w-fit pr-4">
+      <div className="w-fit flex-shrink-0 pr-5">
         {transaction.category && transaction.category.imageURL && (
           <Image
             src={transaction.category.imageURL}
@@ -23,8 +23,8 @@ const Transaction = ({ transaction, planned }: Props) => {
           />
         )}
       </div>
-      <div className="flex flex-grow flex-col">
-        <div className="flex gap-2 align-middle">
+      <div className="flex min-w-0 flex-grow flex-col">
+        <div className=" flex-shrink-0 gap-2 truncate align-middle">
           {transaction.transaction.title}
         </div>
         {/*         {!planned && (
