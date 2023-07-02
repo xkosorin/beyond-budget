@@ -1,6 +1,5 @@
 import { CategoryType } from "@/db/schema";
 import { TransactionWithCategory } from "@/types";
-import { format } from "date-fns";
 import Image from "next/image";
 
 type Props = {

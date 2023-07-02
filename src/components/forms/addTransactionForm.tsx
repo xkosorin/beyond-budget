@@ -82,7 +82,7 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
   return (
     <Form {...form}>
       <form
-        className="flex flex-col group p-[1px]"
+        className="group flex flex-col p-[1px]"
         onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
       >
         <FormField
@@ -146,7 +146,7 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
                       field.onChange(event);
                       setIsExpense(event);
                     }}
-                    className="px-4 rounded-s-md rounded-e-none"
+                    className="rounded-e-none rounded-s-md px-4"
                   >
                     {isExpense ? "-" : "+"}
                   </Toggle>
@@ -180,7 +180,7 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
           control={form.control}
           name="title"
           render={() => (
-            <FormItem className="py-2 w-full">
+            <FormItem className="w-full py-2">
               <FormLabel form="title">Title</FormLabel>
               <FormControl>
                 <Input {...form.register("title")} />
@@ -197,7 +197,7 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
                   control={form.control}
                   name="expenseSchema.plannedSchema.isPlanned"
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-start py-2 mt-6">
+                    <FormItem className="mt-6 flex items-center justify-start py-2">
                       <FormLabel className="mt-2 min-w-[90px]">
                         Is planned?
                       </FormLabel>
@@ -219,7 +219,7 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
                   control={form.control}
                   name="expenseSchema.plannedSchema.dueDate"
                   render={() => (
-                    <FormItem className="py-2 w-9/12">
+                    <FormItem className="w-9/12 py-2">
                       <FormLabel form="dueDate">Due Date</FormLabel>
                       <FormControl>
                         <Input
@@ -244,7 +244,7 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
                   control={form.control}
                   name="expenseSchema.recurringSchema.isRecurring"
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-start py-2 mt-6">
+                    <FormItem className="mt-6 flex items-center justify-start py-2">
                       <FormLabel className="mt-2 min-w-[90px]">
                         Is recurring?
                       </FormLabel>
@@ -267,7 +267,7 @@ const AddTransactionForm: React.FC<Props> = ({ categories }) => {
                   control={form.control}
                   name="expenseSchema.recurringSchema.frequency"
                   render={() => (
-                    <FormItem className="py-2 w-9/12">
+                    <FormItem className="w-9/12 py-2">
                       <FormLabel form="frequency">
                         Occurrences per month
                       </FormLabel>

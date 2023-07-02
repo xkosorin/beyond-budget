@@ -1,10 +1,10 @@
 "use server";
 
 import { db } from "@/db";
+import { category, transaction } from "@/db/schema";
+import { TransactionWithCategory } from "@/types";
 import { desc, eq } from "drizzle-orm";
 import TransactionGroup from "./transactionGroup";
-import { TransactionType, category, transaction } from "@/db/schema";
-import { TransactionWithCategory } from "@/types";
 
 const Transactions = async () => {
   const transactions: TransactionWithCategory[] = await db
