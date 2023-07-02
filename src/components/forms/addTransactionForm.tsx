@@ -20,7 +20,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Toggle } from "@/components/ui/toggle";
+import { useToast } from "@/components/ui/use-toast";
 import { transactionSchema } from "@/lib/validations/transaction";
 import { CategorySelect } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,8 +30,6 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Switch } from "../ui/switch";
-import { useToast } from "../ui/use-toast";
 
 type Inputs = z.infer<typeof transactionSchema>;
 
@@ -37,7 +37,7 @@ type Props = {
   categories: CategorySelect[];
 };
 
-const AddTransactionForm: React.FC<Props> = ({ categories }) => {
+const AddTransactionForm = ({ categories }: Props) => {
   const [isExpense, setIsExpense] = useState(true);
   const [isPlanned, setIsPlanned] = useState(false);
   const [isRecurring, setIsRecurring] = useState(false);

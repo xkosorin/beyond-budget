@@ -1,3 +1,5 @@
+"use server";
+
 import TransactionOptions from "@/components/transactionOptions";
 import { CategoryType } from "@/db/schema";
 import { TransactionWithCategory } from "@/types";

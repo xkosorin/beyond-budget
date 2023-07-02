@@ -1,4 +1,4 @@
-import { boolean, z } from "zod";
+import { z } from "zod";
 
 const uuidRegex =
   /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
@@ -32,10 +32,7 @@ const recurringSchema = z
 const expenseSchema = z
   .object({
     isExpense: z.boolean().default(true),
-    plannedTransactionUUID: z
-      .string()
-      .regex(uuidRegex, "Invalid UUID format")
-      .optional(),
+    plannedTransactionUUID: z.string().uuid().optional(),
     plannedSchema: plannedSchema.optional(),
     recurringSchema: recurringSchema.optional(),
   })
@@ -48,13 +45,13 @@ const expenseSchema = z
   });
 
 export const transactionSchema = z.object({
-  categoryUUID: z.string().regex(uuidRegex, "Invalid UUID format"),
+  categoryUUID: z.string().uuid(),
   amount: z.number().positive(),
   title: z.string(),
   expenseSchema: expenseSchema.optional(),
 });
 
 export const getTransactionSchema = z.object({
-  uuid: z.string().regex(uuidRegex, "Invalid UUID format"),
+  uuid: z.string().uuid(),
   isPlannedTransaction: z.boolean(),
 });

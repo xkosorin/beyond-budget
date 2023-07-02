@@ -1,7 +1,8 @@
+"use server";
+
 import TransactionOptions from "@/components/transactionOptions";
 import { CategoryType } from "@/db/schema";
 import { PlannedTransactionWithCategory } from "@/types";
-import { format } from "date-fns";
 import Image from "next/image";
 
 type Props = {
