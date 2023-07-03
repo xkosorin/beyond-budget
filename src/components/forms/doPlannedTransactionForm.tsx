@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -173,9 +174,11 @@ const DoPlannedTransactionForm = ({
             </FormItem>
           )}
         />
-        <Button type="submit" className="mt-4" disabled={isPending}>
-          Save transaction
-        </Button>
+        <PopoverTrigger asChild>
+          <Button type="submit" className="mt-4" disabled={isPending}>
+            Save transaction
+          </Button>
+        </PopoverTrigger>
       </form>
     </Form>
   );
