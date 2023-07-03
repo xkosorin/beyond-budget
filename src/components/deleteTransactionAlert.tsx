@@ -42,7 +42,7 @@ const DeleteTransactionAlert = ({ uuid, isPlannedTransaction }: Props) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="inline-flex h-8 items-center justify-start px-1 text-sm font-medium underline-offset-4 hover:underline">
+      <AlertDialogTrigger className="inline-flex h-8 items-center justify-start gap-2 px-1 text-sm font-medium underline-offset-4 hover:underline">
         <TrashIcon />
         Delete
       </AlertDialogTrigger>
