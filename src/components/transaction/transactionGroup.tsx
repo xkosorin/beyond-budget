@@ -1,12 +1,12 @@
 "use server";
 
-import { Separator } from "@/components/ui/separator";
-import { TransactionWithCategory } from "@/types";
-import { format } from "date-fns";
 import Transaction from "@/components/transaction/transaction";
+import { Separator } from "@/components/ui/separator";
+import { TransactionQuery } from "@/types";
+import { format } from "date-fns";
 
 type Props = {
-  transactions: TransactionWithCategory[];
+  transactions: TransactionQuery[];
   date: string;
 };
 
@@ -19,7 +19,7 @@ const TransactionGroup = ({ transactions, date }: Props) => {
         </div>
         {transactions.map((t, idx, arr) => (
           <>
-            <Transaction key={t.transaction.uuid} transaction={t} />
+            <Transaction key={t.uuid} transaction={t} />
             {idx !== arr.length - 1 && <Separator />}
           </>
         ))}

@@ -1,11 +1,11 @@
 "use server";
 
 import { db } from "@/db";
-import { CategoryType, category } from "@/db/schema";
+import { CategoryType } from "@/db/schema";
 import Category from "./category";
 
 const Categories = async () => {
-  const categories: CategoryType[] = await db.select().from(category);
+  const categories: CategoryType[] = await db.query.category.findMany();
 
   return (
     <div className="max-w-[calc(100vw_-_16px)] md:max-w-none">

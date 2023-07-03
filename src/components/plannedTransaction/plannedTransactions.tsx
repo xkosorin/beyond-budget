@@ -2,21 +2,23 @@
 
 import PlannedTransactionGroup from "@/components/plannedTransaction/plannedTransactionGroup";
 import { db } from "@/db";
-import { category, plannedTransaction } from "@/db/schema";
-import { PlannedTransactionWithCategory } from "@/types";
-import { desc, eq } from "drizzle-orm";
+import { plannedTransaction } from "@/db/schema";
+import { PlannedTransactionQuery } from "@/types";
+import { desc } from "drizzle-orm";
 
 const PlannedTransactions = async () => {
-  const transactions: PlannedTransactionWithCategory[] = await db
-    .select()
-    .from(plannedTransaction)
-    .leftJoin(category, eq(plannedTransaction.categoryUUID, category.uuid))
-    .orderBy(desc(plannedTransaction.createdAt));
+  const transactions: PlannedTransactionQuery[] =
+    await db.query.plannedTransaction.findMany({
+      with: {
+        category: true,
+      },
+      orderBy: [desc(plannedTransaction.createdAt)],
+    });
 
   const groupedByDate = transactions.reduce<
-    Record<string, PlannedTransactionWithCategory[]>
+    Record<string, PlannedTransactionQuery[]>
   >((groups, item) => {
-    const date = new Date(item.planned_transaction.dueDate);
+    const date = new Date(item.dueDate);
     const dateString = `${date.getFullYear()}-${String(
       date.getMonth() + 1
     ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;

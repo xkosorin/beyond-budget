@@ -6,12 +6,11 @@ import {
 
 export type CategorySelect = Pick<CategoryType, "title" | "uuid" | "type">;
 
-export type TransactionWithCategory = {
-  transaction: TransactionType;
-  category: CategoryType | null;
+export type TransactionQuery = Omit<TransactionType, "categoryUUID"> & {
+  category: CategoryType;
 };
 
-export type PlannedTransactionWithCategory = {
-  planned_transaction: PlannedTransactionType;
-  category: CategoryType | null;
-};
+export type PlannedTransactionQuery = Omit<
+  PlannedTransactionType,
+  "categoryUUID"
+> & { category: CategoryType };

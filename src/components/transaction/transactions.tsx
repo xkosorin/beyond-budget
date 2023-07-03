@@ -2,31 +2,33 @@
 
 import TransactionGroup from "@/components/transaction/transactionGroup";
 import { db } from "@/db";
-import { category, transaction } from "@/db/schema";
-import { TransactionWithCategory } from "@/types";
-import { desc, eq } from "drizzle-orm";
+import { transaction } from "@/db/schema";
+import { TransactionQuery } from "@/types";
+import { desc } from "drizzle-orm";
 
 const Transactions = async () => {
-  const transactions: TransactionWithCategory[] = await db
-    .select()
-    .from(transaction)
-    .leftJoin(category, eq(transaction.categoryUUID, category.uuid))
-    .orderBy(desc(transaction.createdAt));
+  const transactions: TransactionQuery[] = await db.query.transaction.findMany({
+    with: {
+      category: true,
+    },
+    orderBy: [desc(transaction.createdAt)],
+  });
 
-  const groupedByDate = transactions.reduce<
-    Record<string, TransactionWithCategory[]>
-  >((groups, item) => {
-    const date = item.transaction.createdAt;
-    const dateString = `${date.getFullYear()}-${String(
-      date.getMonth() + 1
-    ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  const groupedByDate = transactions.reduce<Record<string, TransactionQuery[]>>(
+    (groups, item) => {
+      const date = item.createdAt;
+      const dateString = `${date.getFullYear()}-${String(
+        date.getMonth() + 1
+      ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 
-    if (!groups[dateString]) {
-      groups[dateString] = [];
-    }
-    groups[dateString].push(item);
-    return groups;
-  }, {});
+      if (!groups[dateString]) {
+        groups[dateString] = [];
+      }
+      groups[dateString].push(item);
+      return groups;
+    },
+    {}
+  );
 
   return (
     <div className="max-w-[calc(100vw_-_16px)] md:max-w-none">

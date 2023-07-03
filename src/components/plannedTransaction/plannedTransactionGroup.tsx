@@ -1,12 +1,12 @@
 "use server";
 
-import { Separator } from "@/components/ui/separator";
-import { PlannedTransactionWithCategory } from "@/types";
-import { format } from "date-fns";
 import PlannedTransaction from "@/components/plannedTransaction/plannedTransaction";
+import { Separator } from "@/components/ui/separator";
+import { PlannedTransactionQuery } from "@/types";
+import { format } from "date-fns";
 
 type Props = {
-  transactions: PlannedTransactionWithCategory[];
+  transactions: PlannedTransactionQuery[];
   date: string;
 };
 
@@ -19,10 +19,7 @@ const PlannedTransactionGroup = ({ transactions, date }: Props) => {
         </div>
         {transactions.map((t, idx, arr) => (
           <>
-            <PlannedTransaction
-              key={t.planned_transaction.uuid}
-              transaction={t}
-            />
+            <PlannedTransaction key={t.uuid} transaction={t} />
             {idx !== arr.length - 1 && <Separator />}
           </>
         ))}
