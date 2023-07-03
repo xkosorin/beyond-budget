@@ -1,12 +1,19 @@
+"use server";
+
 import DeleteTransactionAlert from "@/components/deleteTransactionAlert";
+import DoPlannedTransaction from "@/components/doPlannedTransaction";
+import UpdateTransaction from "@/components/transaction/updateTransaction";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { ArrowTopRightIcon, ChevronDownIcon } from "@radix-ui/react-icons";
-import DoPlannedTransaction from "./doPlannedTransaction";
+import {
+  ArrowTopRightIcon,
+  ChevronDownIcon,
+  Pencil1Icon,
+} from "@radix-ui/react-icons";
 
 type Props = {
   forTransaction: string;
@@ -24,7 +31,7 @@ const TransactionOptions = ({ forTransaction, planned }: Props) => {
         side="bottom"
         align="end"
       >
-        {planned && (
+        {planned ? (
           <>
             <DoPlannedTransaction uuid={forTransaction}>
               {
@@ -34,6 +41,16 @@ const TransactionOptions = ({ forTransaction, planned }: Props) => {
               }
             </DoPlannedTransaction>
             <Separator decorative={true} className="my-1 bg-primary" />
+          </>
+        ) : (
+          <>
+            <UpdateTransaction uuid={forTransaction}>
+              {
+                <button className="inline-flex h-8 items-center justify-start gap-2 px-1 text-sm font-medium underline-offset-4 hover:underline">
+                  <Pencil1Icon /> Edit transaction
+                </button>
+              }
+            </UpdateTransaction>
           </>
         )}
         <DeleteTransactionAlert

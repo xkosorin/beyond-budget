@@ -68,7 +68,7 @@ export async function doPlannedTransactionAction(
   }
 ) {
   await db.transaction(async (tx) => {
-    await db.insert(transaction).values({
+    await tx.insert(transaction).values({
       categoryUUID: input.categoryUUID,
       amount: input.amount,
       title: input.title,
@@ -76,7 +76,7 @@ export async function doPlannedTransactionAction(
       plannedTransactionUUID: input.plannedTransactionUUID,
     });
 
-    const res = await db.query.plannedTransaction.findFirst({
+    const res = await tx.query.plannedTransaction.findFirst({
       where: eq(plannedTransaction.uuid, input.plannedTransactionUUID),
       columns: {
         occurrencesThisMonth: true,
@@ -84,12 +84,33 @@ export async function doPlannedTransactionAction(
     });
 
     if (res) {
-      await db
+      await tx
         .update(plannedTransaction)
         .set({ occurrencesThisMonth: res?.occurrencesThisMonth + 1 })
         .where(eq(plannedTransaction.uuid, input.plannedTransactionUUID));
     }
   });
+
+  revalidatePath(`/`);
+}
+
+export async function updateTransactionAction(
+  input: z.infer<typeof transactionSchema> & {
+    uuid: string;
+  }
+) {
+  const transactionResult = await db.query.transaction.findFirst({
+    where: eq(transaction.uuid, input.uuid),
+  });
+
+  if (!transactionResult) {
+    throw new Error("Transaction not found.");
+  }
+
+  await db
+    .update(transaction)
+    .set(input)
+    .where(eq(transaction.uuid, input.uuid));
 
   revalidatePath(`/`);
 }
