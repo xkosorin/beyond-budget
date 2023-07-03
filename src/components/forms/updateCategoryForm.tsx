@@ -1,5 +1,6 @@
 "use client";
 
+import { updateCategoryAction } from "@/app/_actions/category";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,15 +18,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
 import { CategoryType } from "@/db/schema";
 import { categorySchema } from "@/lib/validations/category";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
-import { updateCategoryAction } from "@/app/_actions/category";
 
 type Props = {
   category: CategoryType;

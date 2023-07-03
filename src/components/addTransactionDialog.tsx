@@ -1,5 +1,6 @@
 "use client";
 
+import AddTransactionForm from "@/components/forms/addTransactionForm";
 import {
   Dialog,
   DialogContent,
@@ -11,7 +12,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { CategorySelect } from "@/types";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
-import AddTransactionForm from "./forms/addTransactionForm";
 
 type Props = {
   categories: CategorySelect[];

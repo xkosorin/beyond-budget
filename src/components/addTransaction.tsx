@@ -1,7 +1,7 @@
 "use server";
 
+import AddTransactionDialog from "@/components/addTransactionDialog";
 import { db } from "@/db";
-import AddTransactionDialog from "./addTransactionDialog";
 
 const AddTransaction = async () => {
   const categories = await db.query.category.findMany({

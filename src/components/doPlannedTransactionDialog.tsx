@@ -1,5 +1,6 @@
 "use client";
 
+import DoPlannedTransactionForm from "@/components/forms/doPlannedTransactionForm";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +11,6 @@ import {
 import { PlannedTransactionType } from "@/db/schema";
 import { CategorySelect } from "@/types";
 import { useState } from "react";
-import DoPlannedTransactionForm from "./forms/doPlannedTransactionForm";
 
 type Props = {
   children: React.ReactNode;

@@ -1,8 +1,8 @@
 "use server";
 
+import Category from "@/components/category/category";
 import { db } from "@/db";
 import { CategoryType } from "@/db/schema";
-import Category from "./category";
 
 const Categories = async () => {
   const categories: CategoryType[] = await db.query.category.findMany();

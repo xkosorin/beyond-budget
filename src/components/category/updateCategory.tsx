@@ -1,9 +1,9 @@
 "use server";
 
+import UpdateCategoryForm from "@/components/forms/updateCategoryForm";
 import { db } from "@/db";
 import { category } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import UpdateCategoryForm from "../forms/updateCategoryForm";
 
 type Props = {
   uuid: string;

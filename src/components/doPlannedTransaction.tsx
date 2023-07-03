@@ -1,9 +1,9 @@
 "use server";
 
+import DoPlannedTransactionDialog from "@/components/doPlannedTransactionDialog";
 import { db } from "@/db";
 import { plannedTransaction } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import DoPlannedTransactionDialog from "./doPlannedTransactionDialog";
 
 type Props = {
   children: React.ReactNode;

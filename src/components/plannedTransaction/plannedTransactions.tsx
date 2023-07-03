@@ -31,7 +31,7 @@ const PlannedTransactions = async () => {
   }, {});
 
   return (
-    <div className="max-w-[calc(100vw_-_16px)] md:max-w-none">
+    <div className="w-full max-w-[calc(100vw_-_16px)] md:max-w-none">
       <div className="scroll-m-20 text-2xl font-semibold tracking-tight">
         Planned Transactions
       </div>
