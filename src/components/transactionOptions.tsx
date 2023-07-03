@@ -1,10 +1,10 @@
+import DeleteTransactionAlert from "@/components/deleteTransactionAlert";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import DeleteTransactionAlert from "@/components/deleteTransactionAlert";
 
 type Props = {
   forTransaction: string;

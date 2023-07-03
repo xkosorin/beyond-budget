@@ -12,10 +12,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { useTransition } from "react";
-import { PopoverTrigger } from "@/components/ui/popover";
 
 type Props = {
   uuid: string;
