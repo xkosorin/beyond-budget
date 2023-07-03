@@ -7,10 +7,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { CategorySelect } from "@/types";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import AddTransactionForm from "./forms/addTransactionForm";
 
-const AddTransactionDialog = ({ children }: { children: React.ReactNode }) => {
+type Props = {
+  categories: CategorySelect[];
+};
+
+const AddTransactionDialog = ({ categories }: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -22,7 +29,12 @@ const AddTransactionDialog = ({ children }: { children: React.ReactNode }) => {
         <DialogHeader>
           <DialogTitle>Add new transaction</DialogTitle>
         </DialogHeader>
-        {children}
+        <ScrollArea>
+          <AddTransactionForm
+            categories={categories}
+            doCloseDialog={() => setOpen(false)}
+          />
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

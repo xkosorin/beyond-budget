@@ -35,9 +35,10 @@ type Inputs = z.infer<typeof transactionSchema>;
 
 type Props = {
   categories: CategorySelect[];
+  doCloseDialog: () => void;
 };
 
-const AddTransactionForm = ({ categories }: Props) => {
+const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
   const [isExpense, setIsExpense] = useState(true);
   const [isPlanned, setIsPlanned] = useState(false);
   const [isRecurring, setIsRecurring] = useState(false);
@@ -57,7 +58,6 @@ const AddTransactionForm = ({ categories }: Props) => {
   const onSubmit = (data: Inputs) => {
     startTransition(async () => {
       try {
-        // Add product to the store
         await addTransactionAction({
           ...data,
         });
@@ -66,9 +66,7 @@ const AddTransactionForm = ({ categories }: Props) => {
 
         form.reset();
         router.push(`/`);
-
-        const closeButton = document.getElementById("close-dialog");
-        if (closeButton) closeButton.click();
+        doCloseDialog();
       } catch (error) {
         error instanceof Error
           ? toast({ title: error.message })

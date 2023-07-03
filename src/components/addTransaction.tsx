@@ -1,8 +1,7 @@
 "use server";
 
-import AddTransactionForm from "@/components/forms/addTransactionForm";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { db } from "@/db";
+import AddTransactionDialog from "./addTransactionDialog";
 
 const AddTransaction = async () => {
   const categories = await db.query.category.findMany({
@@ -13,11 +12,7 @@ const AddTransaction = async () => {
     },
   });
 
-  return (
-    <ScrollArea>
-      <AddTransactionForm categories={categories} />
-    </ScrollArea>
-  );
+  return <AddTransactionDialog categories={categories} />;
 };
 
 export default AddTransaction;
