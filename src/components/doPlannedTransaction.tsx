@@ -1,15 +1,16 @@
 "use server";
 
-import DoPlannedTransactionForm from "@/components/forms/doPlannedTransactionForm";
 import { db } from "@/db";
 import { plannedTransaction } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import DoPlannedTransactionDialog from "./doPlannedTransactionDialog";
 
 type Props = {
+  children: React.ReactNode;
   uuid: string;
 };
 
-const DoPlannedTransaction = async ({ uuid }: Props) => {
+const DoPlannedTransaction = async ({ children, uuid }: Props) => {
   const plannedTransactionResult = await db.query.plannedTransaction.findFirst({
     columns: {
       uuid: true,
@@ -30,13 +31,13 @@ const DoPlannedTransaction = async ({ uuid }: Props) => {
   });
 
   return (
-    <div>
+    <>
       {plannedTransactionResult && (
-        <DoPlannedTransactionForm
-          plannedTransaction={plannedTransactionResult}
-        />
+        <DoPlannedTransactionDialog transaction={plannedTransactionResult}>
+          {children}
+        </DoPlannedTransactionDialog>
       )}
-    </div>
+    </>
   );
 };
 

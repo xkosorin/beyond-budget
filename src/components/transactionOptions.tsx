@@ -4,7 +4,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { Separator } from "@/components/ui/separator";
+import { ArrowTopRightIcon, ChevronDownIcon } from "@radix-ui/react-icons";
+import DoPlannedTransaction from "./doPlannedTransaction";
 
 type Props = {
   forTransaction: string;
@@ -22,15 +24,18 @@ const TransactionOptions = ({ forTransaction, planned }: Props) => {
         side="bottom"
         align="end"
       >
-        {/*         {planned ? (
+        {planned && (
           <>
-            <MoveTransactionDialog id={transaction.id} />
-            <Separator decorative={true} className="bg-primary my-1" />
-            <EditPlannedTransactionDialog id={transaction.id} />
+            <DoPlannedTransaction uuid={forTransaction}>
+              {
+                <button className="inline-flex h-8 items-center justify-start gap-2 px-1 text-sm font-medium underline-offset-4 hover:underline">
+                  <ArrowTopRightIcon /> Execute transaction
+                </button>
+              }
+            </DoPlannedTransaction>
+            <Separator decorative={true} className="my-1 bg-primary" />
           </>
-        ) : (
-          <EditTransactionDialog id={transaction.id} />
-        )} */}
+        )}
         <DeleteTransactionAlert
           uuid={forTransaction}
           isPlannedTransaction={planned}

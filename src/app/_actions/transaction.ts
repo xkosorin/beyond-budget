@@ -63,14 +63,32 @@ export async function deleteTransactionAction(
 }
 
 export async function doPlannedTransactionAction(
-  input: z.infer<typeof doPlannedTransactionSchema>
+  input: z.infer<typeof doPlannedTransactionSchema> & {
+    plannedTransactionUUID: string;
+  }
 ) {
-  await db.insert(transaction).values({
-    categoryUUID: input.categoryUUID,
-    amount: input.amount,
-    title: input.title,
-    isExpense: input.isExpense,
-    plannedTransactionUUID: input.plannedTransactionUUID,
+  await db.transaction(async (tx) => {
+    await db.insert(transaction).values({
+      categoryUUID: input.categoryUUID,
+      amount: input.amount,
+      title: input.title,
+      isExpense: input.isExpense,
+      plannedTransactionUUID: input.plannedTransactionUUID,
+    });
+
+    const res = await db.query.plannedTransaction.findFirst({
+      where: eq(plannedTransaction.uuid, input.plannedTransactionUUID),
+      columns: {
+        occurrencesThisMonth: true,
+      },
+    });
+
+    if (res) {
+      await db
+        .update(plannedTransaction)
+        .set({ occurrencesThisMonth: res?.occurrencesThisMonth + 1 })
+        .where(eq(plannedTransaction.uuid, input.plannedTransactionUUID));
+    }
   });
 
   revalidatePath(`/`);

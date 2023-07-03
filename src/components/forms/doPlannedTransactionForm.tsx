@@ -38,9 +38,13 @@ type Props = {
     PlannedTransactionType,
     "title" | "amount" | "isExpense" | "uuid"
   > & { category: CategorySelect };
+  doCloseDialog: () => void;
 };
 
-const DoPlannedTransactionForm = ({ plannedTransaction }: Props) => {
+const DoPlannedTransactionForm = ({
+  plannedTransaction,
+  doCloseDialog,
+}: Props) => {
   const [isPending, startTransition] = useTransition();
 
   const { toast } = useToast();
@@ -59,7 +63,6 @@ const DoPlannedTransactionForm = ({ plannedTransaction }: Props) => {
   const onSubmit = (data: Inputs) => {
     startTransition(async () => {
       try {
-        // Add product to the store
         await doPlannedTransactionAction({
           ...data,
         });
@@ -68,9 +71,7 @@ const DoPlannedTransactionForm = ({ plannedTransaction }: Props) => {
 
         form.reset();
         router.push(`/`);
-
-        const closeButton = document.getElementById("close-dialog");
-        if (closeButton) closeButton.click();
+        doCloseDialog();
       } catch (error) {
         error instanceof Error
           ? toast({ title: error.message })
