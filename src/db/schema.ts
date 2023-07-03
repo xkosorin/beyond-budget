@@ -55,6 +55,7 @@ export const category = pgTable("category", {
 
 export const categoryRelations = relations(category, ({ many }) => ({
   transaction: many(transaction),
+  plannedTransaction: many(plannedTransaction),
 }));
 
 export const plannedTransaction = pgTable("planned_transaction", {
@@ -72,8 +73,12 @@ export const plannedTransaction = pgTable("planned_transaction", {
 
 export const plannedTransactionRelations = relations(
   plannedTransaction,
-  ({ many }) => ({
+  ({ one, many }) => ({
     transaction: many(transaction),
+    category: one(category, {
+      fields: [plannedTransaction.categoryUUID],
+      references: [category.uuid],
+    }),
   })
 );
 

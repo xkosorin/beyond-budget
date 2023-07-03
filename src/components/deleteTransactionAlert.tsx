@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteTransaction } from "@/app/_actions/transaction";
+import { deleteTransactionAction } from "@/app/_actions/transaction";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,7 +30,7 @@ const DeleteTransactionAlert = ({ uuid, isPlannedTransaction }: Props) => {
   const handleClick = () => {
     startTransition(async () => {
       try {
-        await deleteTransaction({ uuid, isPlannedTransaction });
+        await deleteTransactionAction({ uuid, isPlannedTransaction });
         toast({ title: "Transaction deleted successfully." });
       } catch (error) {
         error instanceof Error

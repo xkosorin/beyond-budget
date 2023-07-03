@@ -55,3 +55,11 @@ export const getTransactionSchema = z.object({
   uuid: z.string().uuid(),
   isPlannedTransaction: z.boolean(),
 });
+
+export const doPlannedTransactionSchema = z.object({
+  categoryUUID: z.string().uuid(),
+  amount: z.number().positive(),
+  title: z.string(),
+  isExpense: z.boolean().default(true),
+  plannedTransactionUUID: z.string().uuid(),
+});

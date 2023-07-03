@@ -3,6 +3,7 @@
 import { db } from "@/db";
 import { plannedTransaction, transaction } from "@/db/schema";
 import {
+  doPlannedTransactionSchema,
   getTransactionSchema,
   transactionSchema,
 } from "@/lib/validations/transaction";
@@ -47,7 +48,7 @@ export async function addTransactionAction(
   revalidatePath(`/`);
 }
 
-export async function deleteTransaction(
+export async function deleteTransactionAction(
   input: z.infer<typeof getTransactionSchema>
 ) {
   if (input.isPlannedTransaction) {
@@ -57,6 +58,20 @@ export async function deleteTransaction(
   } else {
     await db.delete(transaction).where(eq(transaction.uuid, input.uuid));
   }
+
+  revalidatePath(`/`);
+}
+
+export async function doPlannedTransactionAction(
+  input: z.infer<typeof doPlannedTransactionSchema>
+) {
+  await db.insert(transaction).values({
+    categoryUUID: input.categoryUUID,
+    amount: input.amount,
+    title: input.title,
+    isExpense: input.isExpense,
+    plannedTransactionUUID: input.plannedTransactionUUID,
+  });
 
   revalidatePath(`/`);
 }
