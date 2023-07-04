@@ -68,7 +68,7 @@ const UpdateTransactionForm = ({
           uuid: transaction.uuid,
         });
 
-        toast({ title: "Transaction added successfully." });
+        toast({ title: "Transaction updated successfully." });
 
         form.reset();
         router.push(`/`);
