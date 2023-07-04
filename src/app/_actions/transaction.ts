@@ -6,6 +6,7 @@ import {
   doPlannedTransactionSchema,
   getTransactionSchema,
   transactionSchema,
+  updatePlannedTransactionSchema,
 } from "@/lib/validations/transaction";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -20,9 +21,9 @@ export async function addTransactionAction(
       categoryUUID: input.categoryUUID,
       amount: input.amount,
       title: input.title,
-      isExpense: input.expenseSchema?.isExpense,
-      dueDate: input.expenseSchema.plannedSchema.dueDate?.toDateString(),
-      frequecny: input.expenseSchema.recurringSchema?.frequency,
+      isExpense: input.expenseSchema.isExpense,
+      dueDate: input.expenseSchema.plannedSchema.dueDate.toDateString(),
+      frequecny: input.expenseSchema.plannedSchema.frequency,
     });
 
     revalidatePath(`/`);
@@ -111,6 +112,34 @@ export async function updateTransactionAction(
     .update(transaction)
     .set(input)
     .where(eq(transaction.uuid, input.uuid));
+
+  revalidatePath(`/`);
+}
+
+export async function updatePlannedTransactionAction(
+  input: z.infer<typeof updatePlannedTransactionSchema> & {
+    uuid: string;
+  }
+) {
+  const transactionResult = await db.query.plannedTransaction.findFirst({
+    where: eq(plannedTransaction.uuid, input.uuid),
+  });
+
+  if (!transactionResult) {
+    throw new Error("Transaction not found.");
+  }
+
+  await db
+    .update(plannedTransaction)
+    .set({
+      categoryUUID: input.categoryUUID,
+      amount: input.amount,
+      title: input.title,
+      isExpense: input.isExpense,
+      frequecny: input.frequency,
+      dueDate: input.dueDate.toDateString(),
+    })
+    .where(eq(plannedTransaction.uuid, input.uuid));
 
   revalidatePath(`/`);
 }
