@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Toggle } from "@/components/ui/toggle";
 import { useToast } from "@/components/ui/use-toast";
@@ -201,13 +202,14 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
         />
         {isExpense && (
           <>
+            <Separator className="my-4" />
             <div className="flex flex-col">
               <div className="flex items-center justify-between gap-2">
                 <FormField
                   control={form.control}
                   name="expenseSchema.plannedSchema.isPlanned"
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-start py-2">
+                    <FormItem className="flex items-center justify-start space-y-0 py-2">
                       <FormLabel className="mt-2 min-w-[90px]">
                         Is planned?
                       </FormLabel>
@@ -229,7 +231,7 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
                   control={form.control}
                   name="expenseSchema.plannedSchema.dueDate"
                   render={({ field }) => (
-                    <FormItem className="mt-2 w-9/12 py-2">
+                    <FormItem className="w-9/12 py-2">
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
