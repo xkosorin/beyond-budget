@@ -65,12 +65,18 @@ dependencies:
   drizzle-orm:
     specifier: ^0.27.0
     version: 0.27.0(@neondatabase/serverless@0.4.24)(postgres@3.3.5)
+  drizzle-zod:
+    specifier: ^0.4.4
+    version: 0.4.4(drizzle-orm@0.27.0)(zod@3.21.4)
   next:
     specifier: 13.4.8
     version: 13.4.8(react-dom@18.2.0)(react@18.2.0)
   react:
     specifier: 18.2.0
     version: 18.2.0
+  react-day-picker:
+    specifier: ^8.8.0
+    version: 8.8.0(date-fns@2.30.0)(react@18.2.0)
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
@@ -2465,6 +2471,16 @@ packages:
       postgres: 3.3.5
     dev: false
 
+  /drizzle-zod@0.4.4(drizzle-orm@0.27.0)(zod@3.21.4):
+    resolution: {integrity: sha512-XNn0mjQ306Hvg+CuyKV98wnsWBWeTqv+kgE/N79Zj0EdCvjD2kaoN5sFDGFkMVqPQuP7IB1IPs0lEcOij1RvBA==}
+    peerDependencies:
+      drizzle-orm: '>=0.23.13'
+      zod: '*'
+    dependencies:
+      drizzle-orm: 0.27.0(@neondatabase/serverless@0.4.24)(postgres@3.3.5)
+      zod: 3.21.4
+    dev: false
+
   /electron-to-chromium@1.4.447:
     resolution: {integrity: sha512-sxX0LXh+uL41hSJsujAN86PjhrV/6c79XmpY0TvjZStV6VxIgarf8SRkUoUTuYmFcZQTemsoqo8qXOGw5npWfw==}
     dev: true
@@ -4179,6 +4195,16 @@ packages:
   /quick-lru@4.0.1:
     resolution: {integrity: sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==}
     engines: {node: '>=8'}
+    dev: false
+
+  /react-day-picker@8.8.0(date-fns@2.30.0)(react@18.2.0):
+    resolution: {integrity: sha512-QIC3uOuyGGbtypbd5QEggsCSqVaPNu8kzUWquZ7JjW9fuWB9yv7WyixKmnaFelTLXFdq7h7zU6n/aBleBqe/dA==}
+    peerDependencies:
+      date-fns: ^2.28.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      date-fns: 2.30.0
+      react: 18.2.0
     dev: false
 
   /react-dom@18.2.0(react@18.2.0):

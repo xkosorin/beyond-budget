@@ -2,6 +2,7 @@
 
 import { addTransactionAction } from "@/app/_actions/transaction";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -11,6 +12,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -23,9 +29,12 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Toggle } from "@/components/ui/toggle";
 import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 import { transactionSchema } from "@/lib/validations/transaction";
 import { CategorySelect } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -41,7 +50,6 @@ type Props = {
 const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
   const [isExpense, setIsExpense] = useState(true);
   const [isPlanned, setIsPlanned] = useState(false);
-  const [isRecurring, setIsRecurring] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const { toast } = useToast();
@@ -52,6 +60,12 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
     defaultValues: {
       amount: 0,
       title: "",
+      expenseSchema: {
+        plannedSchema: {
+          dueDate: new Date(Date.now()),
+          frequency: 1,
+        },
+      },
     },
   });
 
@@ -193,7 +207,7 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
                   control={form.control}
                   name="expenseSchema.plannedSchema.isPlanned"
                   render={({ field }) => (
-                    <FormItem className="mt-6 flex items-center justify-start py-2">
+                    <FormItem className="flex items-center justify-start py-2">
                       <FormLabel className="mt-2 min-w-[90px]">
                         Is planned?
                       </FormLabel>
@@ -214,22 +228,38 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
                 <FormField
                   control={form.control}
                   name="expenseSchema.plannedSchema.dueDate"
-                  render={() => (
-                    <FormItem className="w-9/12 py-2">
-                      <FormLabel form="dueDate">Due Date</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="date"
-                          disabled={!isPlanned}
-                          {...form.register(
-                            "expenseSchema.plannedSchema.dueDate",
-                            {
-                              setValueAs: (v) =>
-                                v === "" ? undefined : new Date(v),
-                            }
-                          )}
-                        />
-                      </FormControl>
+                  render={({ field }) => (
+                    <FormItem className="mt-2 w-9/12 py-2">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              disabled={!isPlanned}
+                              variant={"outline"}
+                              className={cn(
+                                "w-full text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) => date < new Date()}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -238,33 +268,10 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
               <div className="flex items-center justify-between gap-2">
                 <FormField
                   control={form.control}
-                  name="expenseSchema.recurringSchema.isRecurring"
-                  render={({ field }) => (
-                    <FormItem className="mt-6 flex items-center justify-start py-2">
-                      <FormLabel className="mt-2 min-w-[90px]">
-                        Is recurring?
-                      </FormLabel>
-                      <FormControl>
-                        <Switch
-                          checked={isRecurring}
-                          onCheckedChange={() => {
-                            field.onChange(!isRecurring);
-                            setIsRecurring(!isRecurring);
-                          }}
-                          defaultChecked={false}
-                          disabled={!isPlanned}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="expenseSchema.recurringSchema.frequency"
+                  name="expenseSchema.plannedSchema.frequency"
                   render={() => (
-                    <FormItem className="w-9/12 py-2">
-                      <FormLabel form="frequency">
+                    <FormItem className="flex w-full items-center justify-start gap-2 py-2">
+                      <FormLabel form="frequency" className="mt-2 shrink-0">
                         Occurrences per month
                       </FormLabel>
                       <FormControl>
@@ -273,9 +280,9 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
                           step="1"
                           min={1}
                           max={31}
-                          disabled={!isRecurring}
+                          disabled={!isPlanned}
                           {...form.register(
-                            "expenseSchema.recurringSchema.frequency",
+                            "expenseSchema.plannedSchema.frequency",
                             {
                               setValueAs: (v) =>
                                 v === "" ? undefined : parseInt(v),
