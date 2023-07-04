@@ -20,7 +20,7 @@ export const transaction = pgTable("transaction", {
   categoryUUID: uuid("category_uuid")
     .notNull()
     .references(() => category.uuid),
-  budgetUUID: uuid("category_uuid").references(() => category.uuid),
+  budgetUUID: uuid("budget_uuid").references(() => budget.uuid),
   plannedTransactionUUID: uuid("planned_transaction_uuid").references(
     () => plannedTransaction.uuid
   ),
