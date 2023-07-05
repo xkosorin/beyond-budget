@@ -15,7 +15,13 @@ const UpdatePlannedTransaction = async ({ children, uuid }: Props) => {
     where: eq(plannedTransaction.uuid, uuid),
   });
 
-  const categories = await db.query.category.findMany();
+  const categories = await db.query.category.findMany({
+    columns: {
+      uuid: true,
+      title: true,
+      type: true,
+    },
+  });
 
   return (
     <>

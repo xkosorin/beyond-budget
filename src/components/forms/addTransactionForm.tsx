@@ -32,7 +32,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { transactionSchema } from "@/lib/validations/transaction";
-import { CategorySelect } from "@/types";
+import { BudgetSelect, CategorySelect } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
@@ -45,10 +45,11 @@ type Inputs = z.infer<typeof transactionSchema>;
 
 type Props = {
   categories: CategorySelect[];
+  budgets: BudgetSelect[];
   doCloseDialog: () => void;
 };
 
-const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
+const AddTransactionForm = ({ categories, budgets, doCloseDialog }: Props) => {
   const [isExpense, setIsExpense] = useState(true);
   const [isPlanned, setIsPlanned] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -100,14 +101,17 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
           control={form.control}
           name="categoryUUID"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex w-full items-center justify-start pt-2">
+              <FormLabel form="category" className="mt-2 w-48">
+                Category
+              </FormLabel>
               <FormControl>
                 <Select
                   name={field.name}
                   value={field.value}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="mt-0 w-full py-0">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -142,8 +146,8 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
             </FormItem>
           )}
         />
-        <FormLabel className="mt-6">Amount</FormLabel>
-        <div className="flex flex-row pt-2">
+        <div className="flex flex-row items-center space-y-2 pt-2">
+          <FormLabel className="w-[calc(12rem_+_20px)]">Amount</FormLabel>
           <FormField
             control={form.control}
             name="expenseSchema.isExpense"
@@ -157,7 +161,7 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
                       field.onChange(event);
                       setIsExpense(event);
                     }}
-                    className="rounded-e-none rounded-s-md px-4"
+                    className="rounded-e-none rounded-s-md border-e-0 px-4"
                   >
                     {isExpense ? "-" : "+"}
                   </Toggle>
@@ -176,7 +180,7 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
                     type="number"
                     pattern="[0-9]+([\.,][0-9]+)?"
                     step="0.01"
-                    className="rounded-s-none"
+                    className="mt-0 w-full rounded-s-none py-0"
                     {...form.register("amount", {
                       setValueAs: (v) => (v === "" ? undefined : parseFloat(v)),
                     })}
@@ -191,10 +195,49 @@ const AddTransactionForm = ({ categories, doCloseDialog }: Props) => {
           control={form.control}
           name="title"
           render={() => (
-            <FormItem className="w-full py-2">
-              <FormLabel form="title">Title</FormLabel>
+            <FormItem className="flex w-full items-center justify-start pt-2">
+              <FormLabel form="title" className="w-48">
+                Title
+              </FormLabel>
               <FormControl>
-                <Input {...form.register("title")} />
+                <Input className="w-full py-0" {...form.register("title")} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="budgetUUID"
+          render={({ field }) => (
+            <FormItem className="flex w-full items-center justify-start pt-2">
+              <FormLabel form="budget" className="w-48">
+                Budget
+              </FormLabel>
+              <FormControl>
+                <Select
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a budget" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value={""} key={"default"}>
+                        <small className="text-sm font-medium leading-none">
+                          Select a budget
+                        </small>
+                      </SelectItem>
+                      {budgets.map((budget) => (
+                        <SelectItem value={budget.uuid} key={budget.uuid}>
+                          {budget.title}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>

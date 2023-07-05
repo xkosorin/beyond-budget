@@ -10,19 +10,21 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TransactionType } from "@/db/schema";
-import { CategorySelect } from "@/types";
+import { BudgetSelect, CategorySelect } from "@/types";
 import React, { useState } from "react";
 
 type Props = {
   children: React.ReactNode;
   transaction: TransactionType;
   categories: CategorySelect[];
+  budgets: BudgetSelect[];
 };
 
 const UpdateTransactionDialog = ({
   children,
   transaction,
   categories,
+  budgets,
 }: Props) => {
   const [open, setOpen] = useState(false);
 
@@ -37,6 +39,7 @@ const UpdateTransactionDialog = ({
           <UpdateTransactionForm
             transaction={transaction}
             categories={categories}
+            budgets={budgets}
             doCloseDialog={() => setOpen(false)}
           />
         </ScrollArea>

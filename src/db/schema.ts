@@ -67,6 +67,7 @@ export const plannedTransaction = pgTable("planned_transaction", {
   dueDate: date("due_date").notNull(),
   paid: boolean("is_paid").default(false).notNull(),
   title: text("title").notNull(),
+  budgetUUID: uuid("budget_uuid").references(() => budget.uuid),
   categoryUUID: uuid("category_uuid").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
@@ -78,6 +79,10 @@ export const plannedTransactionRelations = relations(
     category: one(category, {
       fields: [plannedTransaction.categoryUUID],
       references: [category.uuid],
+    }),
+    budget: one(budget, {
+      fields: [plannedTransaction.budgetUUID],
+      references: [budget.uuid],
     }),
   })
 );
@@ -92,6 +97,7 @@ export const budget = pgTable("budget", {
 
 export const budgetRelations = relations(budget, ({ many }) => ({
   transaction: many(transaction),
+  plannedTransaction: many(plannedTransaction),
 }));
 
 export const label = pgTable("label", {

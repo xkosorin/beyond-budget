@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { plannedTransaction, transaction } from "@/db/schema";
+import { budget, plannedTransaction, transaction } from "@/db/schema";
 import {
   doPlannedTransactionSchema,
   getTransactionSchema,
@@ -15,10 +15,26 @@ import { z } from "zod";
 export async function addTransactionAction(
   input: z.infer<typeof transactionSchema>
 ) {
+  const budgetInput = input.budgetUUID === "" ? null : input.budgetUUID;
+
+  if (budgetInput) {
+    const budgetResult = await db.query.budget.findFirst({
+      where: eq(budget.uuid, budgetInput),
+      columns: {
+        uuid: true,
+      },
+    });
+
+    if (!budgetResult) {
+      throw new Error("Budget not found.");
+    }
+  }
+
   if (input.expenseSchema?.plannedSchema?.isPlanned) {
     //Add planned transaction
     await db.insert(plannedTransaction).values({
       categoryUUID: input.categoryUUID,
+      budgetUUID: budgetInput,
       amount: input.amount,
       title: input.title,
       isExpense: input.expenseSchema.isExpense,
@@ -30,17 +46,11 @@ export async function addTransactionAction(
     return;
   }
 
-  if (input.expenseSchema?.plannedTransactionUUID) {
-    //Add transaction linked to planned transaction
-
-    revalidatePath(`/`);
-    return;
-  }
-
   //Add transaction
   await db.insert(transaction).values({
     categoryUUID: input.categoryUUID,
     amount: input.amount,
+    budgetUUID: budgetInput,
     title: input.title,
     isExpense: input.expenseSchema?.isExpense,
     plannedTransactionUUID: null,
@@ -68,28 +78,39 @@ export async function doPlannedTransactionAction(
     plannedTransactionUUID: string;
   }
 ) {
-  await db.transaction(async (tx) => {
-    await tx.insert(transaction).values({
-      categoryUUID: input.categoryUUID,
-      amount: input.amount,
-      title: input.title,
-      isExpense: input.isExpense,
-      plannedTransactionUUID: input.plannedTransactionUUID,
-    });
+  const budgetInput = input.budgetUUID === "" ? null : input.budgetUUID;
 
-    const res = await tx.query.plannedTransaction.findFirst({
-      where: eq(plannedTransaction.uuid, input.plannedTransactionUUID),
+  if (budgetInput) {
+    const budgetResult = await db.query.budget.findFirst({
+      where: eq(budget.uuid, budgetInput),
       columns: {
-        occurrencesThisMonth: true,
+        uuid: true,
       },
     });
 
-    if (res) {
-      await tx
-        .update(plannedTransaction)
-        .set({ occurrencesThisMonth: res?.occurrencesThisMonth + 1 })
-        .where(eq(plannedTransaction.uuid, input.plannedTransactionUUID));
+    if (!budgetResult) {
+      throw new Error("Budget not found.");
     }
+  }
+
+  const transactionResult = await db.query.plannedTransaction.findFirst({
+    where: eq(plannedTransaction.uuid, input.plannedTransactionUUID),
+    columns: {
+      uuid: true,
+    },
+  });
+
+  if (!transactionResult) {
+    throw new Error("Transaction not found.");
+  }
+
+  await db.insert(transaction).values({
+    categoryUUID: input.categoryUUID,
+    amount: input.amount,
+    title: input.title,
+    budgetUUID: budgetInput,
+    isExpense: input.isExpense,
+    plannedTransactionUUID: input.plannedTransactionUUID,
   });
 
   revalidatePath(`/`);
@@ -102,18 +123,42 @@ export async function updateTransactionAction(
 ) {
   const transactionResult = await db.query.transaction.findFirst({
     where: eq(transaction.uuid, input.uuid),
+    columns: {
+      uuid: true,
+    },
   });
 
   if (!transactionResult) {
-    throw new Error("Transaction not found.");
+    throw new Error("Selected transaction not found.");
+  }
+
+  let budgetInput = input.budgetUUID === "" ? null : input.budgetUUID;
+
+  if (budgetInput) {
+    let budgetResult = await db.query.budget.findFirst({
+      where: eq(budget.uuid, budgetInput),
+      columns: {
+        uuid: true,
+      },
+    });
+
+    if (!budgetResult) {
+      throw new Error("Selected budget not found.");
+    }
   }
 
   await db
     .update(transaction)
-    .set(input)
+    .set({
+      categoryUUID: input.categoryUUID,
+      amount: input.amount,
+      budgetUUID: budgetInput,
+      title: input.title,
+    })
     .where(eq(transaction.uuid, input.uuid));
 
   revalidatePath(`/`);
+  return;
 }
 
 export async function updatePlannedTransactionAction(
@@ -123,10 +168,28 @@ export async function updatePlannedTransactionAction(
 ) {
   const transactionResult = await db.query.plannedTransaction.findFirst({
     where: eq(plannedTransaction.uuid, input.uuid),
+    columns: {
+      uuid: true,
+    },
   });
 
   if (!transactionResult) {
     throw new Error("Transaction not found.");
+  }
+
+  let budgetInput = input.budgetUUID === "" ? null : input.budgetUUID;
+
+  if (budgetInput) {
+    let budgetResult = await db.query.budget.findFirst({
+      where: eq(budget.uuid, budgetInput),
+      columns: {
+        uuid: true,
+      },
+    });
+
+    if (!budgetResult) {
+      throw new Error("Selected budget not found.");
+    }
   }
 
   await db
@@ -135,6 +198,7 @@ export async function updatePlannedTransactionAction(
       categoryUUID: input.categoryUUID,
       amount: input.amount,
       title: input.title,
+      budgetUUID: budgetInput,
       isExpense: input.isExpense,
       frequecny: input.frequency,
       dueDate: input.dueDate.toDateString(),

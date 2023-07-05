@@ -25,7 +25,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { useToast } from "@/components/ui/use-toast";
 import { TransactionType } from "@/db/schema";
 import { updateTransactionSchema } from "@/lib/validations/transaction";
-import { CategorySelect } from "@/types";
+import { BudgetSelect, CategorySelect } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
@@ -37,12 +37,14 @@ type Inputs = z.infer<typeof updateTransactionSchema>;
 type Props = {
   transaction: TransactionType;
   categories: CategorySelect[];
+  budgets: BudgetSelect[];
   doCloseDialog: () => void;
 };
 
 const UpdateTransactionForm = ({
   transaction,
   categories,
+  budgets,
   doCloseDialog,
 }: Props) => {
   const [isPending, startTransition] = useTransition();
@@ -54,6 +56,7 @@ const UpdateTransactionForm = ({
     resolver: zodResolver(updateTransactionSchema),
     defaultValues: {
       categoryUUID: transaction.categoryUUID,
+      budgetUUID: transaction.budgetUUID || "",
       amount: transaction.amount,
       title: transaction.title,
       isExpense: transaction.isExpense,
@@ -91,7 +94,10 @@ const UpdateTransactionForm = ({
           control={form.control}
           name="categoryUUID"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex w-full items-center justify-start pt-2">
+              <FormLabel form="category" className="mt-2 w-48">
+                Category
+              </FormLabel>
               <FormControl>
                 <Select
                   name={field.name}
@@ -133,8 +139,9 @@ const UpdateTransactionForm = ({
             </FormItem>
           )}
         />
-        <FormLabel className="mt-6">Amount</FormLabel>
-        <div className="flex flex-row pt-2">
+
+        <div className="flex flex-row items-center space-y-2 pt-2">
+          <FormLabel className="w-[calc(12rem_+_20px)]">Amount</FormLabel>
           <FormField
             control={form.control}
             name="isExpense"
@@ -182,8 +189,10 @@ const UpdateTransactionForm = ({
           control={form.control}
           name="title"
           render={() => (
-            <FormItem className="w-full py-2">
-              <FormLabel form="title">Title</FormLabel>
+            <FormItem className="flex flex-row items-center space-y-2 pt-2">
+              <FormLabel form="title" className="mt-2 w-48">
+                Title
+              </FormLabel>
               <FormControl>
                 <Input {...form.register("title")} />
               </FormControl>
@@ -191,11 +200,46 @@ const UpdateTransactionForm = ({
             </FormItem>
           )}
         />
-        <PopoverTrigger asChild>
-          <Button type="submit" className="mt-4" disabled={isPending}>
-            Save transaction
-          </Button>
-        </PopoverTrigger>
+        <FormField
+          control={form.control}
+          name="budgetUUID"
+          render={({ field }) => (
+            <FormItem className="flex w-full items-center justify-start pt-2">
+              <FormLabel form="budget" className="w-48">
+                Budget
+              </FormLabel>
+              <FormControl>
+                <Select
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a budget" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value={""} key={"default"}>
+                        <small className="text-sm font-medium leading-none">
+                          Select a budget
+                        </small>
+                      </SelectItem>
+                      {budgets.map((budget) => (
+                        <SelectItem value={budget.uuid} key={budget.uuid}>
+                          {budget.title}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" className="mt-4" disabled={isPending}>
+          Save transaction
+        </Button>
       </form>
     </Form>
   );

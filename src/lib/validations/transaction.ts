@@ -32,6 +32,13 @@ export const transactionSchema = z.object({
   categoryUUID: z.string().uuid(),
   amount: z.number().positive(),
   title: z.string(),
+  budgetUUID: z.string().refine((data) => {
+    if (data !== "") {
+      return z.object({ data: z.string().uuid() });
+    }
+
+    return true;
+  }),
   expenseSchema: expenseSchema.optional(),
 });
 
@@ -44,6 +51,13 @@ export const doPlannedTransactionSchema = z.object({
   categoryUUID: z.string().uuid(),
   amount: z.number().positive(),
   title: z.string(),
+  budgetUUID: z.string().refine((data) => {
+    if (data !== "") {
+      return z.object({ data: z.string().uuid() });
+    }
+
+    return true;
+  }),
   isExpense: z.boolean().default(true),
   plannedTransactionUUID: z.string().uuid(),
 });
@@ -52,6 +66,13 @@ export const updateTransactionSchema = z.object({
   categoryUUID: z.string().uuid(),
   amount: z.number().positive(),
   title: z.string(),
+  budgetUUID: z.string().refine((data) => {
+    if (data !== "") {
+      return z.object({ data: z.string().uuid() });
+    }
+
+    return true;
+  }),
   isExpense: z.boolean(),
 });
 
@@ -59,6 +80,13 @@ export const updatePlannedTransactionSchema = z.object({
   categoryUUID: z.string().uuid(),
   amount: z.number().positive(),
   title: z.string(),
+  budgetUUID: z.string().refine((data) => {
+    if (data !== "") {
+      return z.object({ data: z.string().uuid() });
+    }
+
+    return true;
+  }),
   isExpense: z.boolean(),
   frequency: z.number().max(31).min(1).optional().default(1),
   dueDate: z.date().min(new Date()).optional().default(new Date()),

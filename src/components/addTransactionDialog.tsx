@@ -9,15 +9,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CategorySelect } from "@/types";
+import { BudgetSelect, CategorySelect } from "@/types";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 
 type Props = {
   categories: CategorySelect[];
+  budgets: BudgetSelect[];
 };
 
-const AddTransactionDialog = ({ categories }: Props) => {
+const AddTransactionDialog = ({ categories, budgets }: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -32,6 +33,7 @@ const AddTransactionDialog = ({ categories }: Props) => {
         <ScrollArea>
           <AddTransactionForm
             categories={categories}
+            budgets={budgets}
             doCloseDialog={() => setOpen(false)}
           />
         </ScrollArea>

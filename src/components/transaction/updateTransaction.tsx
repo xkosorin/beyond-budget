@@ -15,7 +15,20 @@ const UpdateTransaction = async ({ children, uuid }: Props) => {
     where: eq(transaction.uuid, uuid),
   });
 
-  const categories = await db.query.category.findMany();
+  const categories = await db.query.category.findMany({
+    columns: {
+      uuid: true,
+      title: true,
+      type: true,
+    },
+  });
+
+  const budgets = await db.query.budget.findMany({
+    columns: {
+      uuid: true,
+      title: true,
+    },
+  });
 
   return (
     <>
@@ -23,6 +36,7 @@ const UpdateTransaction = async ({ children, uuid }: Props) => {
         <UpdateTransactionDialog
           transaction={transactionResult}
           categories={categories}
+          budgets={budgets}
         >
           {children}
         </UpdateTransactionDialog>

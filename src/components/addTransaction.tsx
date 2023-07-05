@@ -12,7 +12,14 @@ const AddTransaction = async () => {
     },
   });
 
-  return <AddTransactionDialog categories={categories} />;
+  const budgets = await db.query.budget.findMany({
+    columns: {
+      uuid: true,
+      title: true,
+    },
+  });
+
+  return <AddTransactionDialog categories={categories} budgets={budgets} />;
 };
 
 export default AddTransaction;
