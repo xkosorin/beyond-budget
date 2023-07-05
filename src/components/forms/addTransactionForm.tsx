@@ -62,6 +62,7 @@ const AddTransactionForm = ({ categories, budgets, doCloseDialog }: Props) => {
     defaultValues: {
       amount: 0,
       title: "",
+      budgetUUID: "",
       expenseSchema: {
         plannedSchema: {
           dueDate: new Date(Date.now()),

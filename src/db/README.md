@@ -90,7 +90,6 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 ```
 
 ### Trigger to update budget on transaction insert

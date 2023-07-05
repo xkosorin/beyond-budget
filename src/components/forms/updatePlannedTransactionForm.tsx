@@ -70,6 +70,7 @@ const UpdatePlannedTransactionForm = ({
       frequency: transaction.frequecny,
       dueDate: new Date(transaction.dueDate),
       isPlanned: true,
+      budgetUUID: transaction.budgetUUID || "",
     },
   });
 

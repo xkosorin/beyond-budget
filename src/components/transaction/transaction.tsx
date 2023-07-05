@@ -1,6 +1,7 @@
 "use server";
 
 import TransactionOptions from "@/components/transactionOptions";
+import { cn } from "@/lib/utils";
 import { TransactionQuery } from "@/types";
 import Image from "next/image";
 
@@ -25,7 +26,13 @@ const Transaction = ({ transaction }: Props) => {
           {transaction.title}
         </div>
       </div>
-      <div className="ml-auto w-fit min-w-[80px] whitespace-nowrap px-1 text-right text-sm font-bold md:px-4 md:text-base xl:min-w-[120px]">
+      <div
+        className={cn(
+          "ml-auto w-fit min-w-[80px] whitespace-nowrap px-1 text-right text-sm font-bold md:px-4 md:text-base xl:min-w-[120px]",
+          transaction.isExpense && "text-[#FF6369]",
+          !transaction.isExpense && "text-[#3FCF8E]"
+        )}
+      >
         {(transaction.isExpense ? "- " : "+  ") +
           Number(transaction.amount).toFixed(2) +
           " €"}
