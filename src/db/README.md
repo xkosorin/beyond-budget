@@ -56,29 +56,33 @@ EXECUTE FUNCTION update_budget_on_transaction_delete();
 
 ### Function to update budget(s) on transaction update
 ```
-CREATE FUNCTION update_budget_on_transaction_update()
+CREATE OR REPLACE FUNCTION update_budget_on_transaction_update()
   RETURNS TRIGGER AS $$
 DECLARE
   old_budget_uuid UUID;
   new_budget_uuid UUID;
+  old_amount FLOAT;
+  new_amount FLOAT;
 BEGIN
-  -- Capture the old and new budget_uuid values from the update
+  -- Capture the old and new budget_uuid values and amount from the update
   old_budget_uuid := OLD.budget_uuid;
   new_budget_uuid := NEW.budget_uuid;
+  old_amount := OLD.amount;
+  new_amount := NEW.amount;
 
   -- Check if budget_uuid is changed
-  IF old_budget_uuid IS DISTINCT FROM new_budget_uuid THEN
+  IF old_budget_uuid IS DISTINCT FROM new_budget_uuid OR old_amount IS DISTINCT FROM new_amount THEN
     -- Update the old budget's spent value
     IF old_budget_uuid IS NOT NULL THEN
       UPDATE budget
-      SET spent = spent - OLD.amount
+      SET spent = spent - old_amount::FLOAT
       WHERE uuid = old_budget_uuid;
     END IF;
 
     -- Update the new budget's spent value
     IF new_budget_uuid IS NOT NULL THEN
       UPDATE budget
-      SET spent = spent + NEW.amount
+      SET spent = spent + new_amount::FLOAT
       WHERE uuid = new_budget_uuid;
     END IF;
   END IF;
@@ -86,6 +90,7 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
 ```
 
 ### Trigger to update budget on transaction insert
