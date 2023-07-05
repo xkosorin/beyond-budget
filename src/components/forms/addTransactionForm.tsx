@@ -220,6 +220,7 @@ const AddTransactionForm = ({ categories, budgets, doCloseDialog }: Props) => {
                   name={field.name}
                   value={field.value}
                   onValueChange={field.onChange}
+                  disabled={isExpense}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a budget" />
