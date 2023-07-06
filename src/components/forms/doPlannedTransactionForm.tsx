@@ -174,11 +174,9 @@ const DoPlannedTransactionForm = ({
             </FormItem>
           )}
         />
-        <PopoverTrigger asChild>
-          <Button type="submit" className="mt-4" disabled={isPending}>
-            Save transaction
-          </Button>
-        </PopoverTrigger>
+        <Button type="submit" className="mt-4" disabled={isPending}>
+          Save transaction
+        </Button>
       </form>
     </Form>
   );

@@ -4,7 +4,7 @@ import Transactions from "@/components/transaction/transactions";
 import Budgets from "@/components/budget/budgets";
 
 const Home = () => (
-  <main className="flex min-h-screen flex-col items-center justify-start gap-2 p-2 md:p-24">
+  <main className="mb-12 flex min-h-screen flex-col items-center justify-start gap-2 p-2 md:mb-0 md:p-24">
     <div className="flex flex-col gap-6 md:grid md:grid-cols-2 md:gap-12">
       <Transactions />
       <div className="flex flex-col gap-6">
