@@ -18,6 +18,21 @@ export const metadata = {
     initialScale: 1,
     maximumScale: 1,
   },
+  manifest: "/manifest.json",
+  themeColor: "#FFFFFF",
+  applicationName: "Beyond Budget",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Beyond Budget",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  icons: {
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({

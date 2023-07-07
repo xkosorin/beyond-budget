@@ -13,6 +13,7 @@
   "dependencies": {
     "@clerk/nextjs": "^4.21.14",
     "@clerk/themes": "^1.7.5",
+    "@ducanh2912/next-pwa": "^9.1.4",
     "@hookform/resolvers": "^3.1.1",
     "@neondatabase/serverless": "^0.4.26",
     "@radix-ui/react-alert-dialog": "^1.0.4",

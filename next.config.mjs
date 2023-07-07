@@ -1,5 +1,11 @@
 await import("./src/env.mjs");
 
+import withPWAInit from "@ducanh2912/next-pwa";
+
+const withPWA = withPWAInit({
+  dest: "public",
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -16,4 +22,4 @@ const nextConfig = {
   output: "standalone",
 };
 
-export default nextConfig;
+export default withPWA(nextConfig);
