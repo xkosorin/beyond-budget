@@ -5,16 +5,17 @@ import DoPlannedTransaction from "@/components/doPlannedTransaction";
 import UpdatePlannedTransaction from "@/components/plannedTransaction/updatePlannedTransaction";
 import UpdateTransaction from "@/components/transaction/updateTransaction";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Separator } from "@/components/ui/separator";
-import {
   ArrowTopRightIcon,
   ChevronDownIcon,
   Pencil1Icon,
+  TrashIcon,
 } from "@radix-ui/react-icons";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 type Props = {
   forTransaction: string;
@@ -23,7 +24,7 @@ type Props = {
 
 const TransactionOptions = ({ forTransaction, planned }: Props) => {
   return (
-    <Popover>
+    /*     <Popover>
       <PopoverTrigger>
         <ChevronDownIcon />
       </PopoverTrigger>
@@ -66,7 +67,27 @@ const TransactionOptions = ({ forTransaction, planned }: Props) => {
           isPlannedTransaction={planned}
         />
       </PopoverContent>
-    </Popover>
+    </Popover> */
+
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger>
+        <ChevronDownIcon />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        {planned ? (
+          <>
+            <DoPlannedTransaction uuid={forTransaction} />
+            <UpdatePlannedTransaction uuid={forTransaction} />
+          </>
+        ) : (
+          <UpdateTransaction uuid={forTransaction} />
+        )}
+        <DeleteTransactionAlert
+          uuid={forTransaction}
+          isPlannedTransaction={planned}
+        />
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

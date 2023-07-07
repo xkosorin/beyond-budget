@@ -12,10 +12,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
-import { TrashIcon } from "@radix-ui/react-icons";
 import { useTransition } from "react";
+import { DropdownMenuItem } from "./ui/dropdown-menu";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 type Props = {
   uuid: string;
@@ -42,9 +42,14 @@ const DeleteTransactionAlert = ({ uuid, isPlannedTransaction }: Props) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="inline-flex h-8 items-center justify-start gap-2 px-1 text-sm font-medium underline-offset-4 hover:underline">
-        <TrashIcon />
-        Delete
+      <AlertDialogTrigger asChild>
+        <DropdownMenuItem
+          onSelect={(event) => {
+            event.preventDefault();
+          }}
+        >
+          <TrashIcon /> Delete
+        </DropdownMenuItem>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -55,14 +60,10 @@ const DeleteTransactionAlert = ({ uuid, isPlannedTransaction }: Props) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <PopoverTrigger asChild>
-            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-          </PopoverTrigger>
-          <PopoverTrigger asChild>
-            <AlertDialogAction onClick={handleClick} disabled={isPending}>
-              Delete
-            </AlertDialogAction>
-          </PopoverTrigger>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleClick} disabled={isPending}>
+            Delete
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

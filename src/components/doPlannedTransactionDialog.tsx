@@ -11,21 +11,30 @@ import {
 import { PlannedTransactionType } from "@/db/schema";
 import { CategorySelect } from "@/types";
 import { useState } from "react";
+import { DropdownMenuItem } from "./ui/dropdown-menu";
+import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 
 type Props = {
-  children: React.ReactNode;
   transaction: Pick<
     PlannedTransactionType,
-    "title" | "amount" | "isExpense" | "uuid"
+    "title" | "amount" | "isExpense" | "uuid" | "budgetUUID"
   > & { category: CategorySelect };
 };
 
-const DoPlannedTransactionDialog = ({ children, transaction }: Props) => {
+const DoPlannedTransactionDialog = ({ transaction }: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger asChild>
+        <DropdownMenuItem
+          onSelect={(event) => {
+            event.preventDefault();
+          }}
+        >
+          <ArrowTopRightIcon /> Execute transaction
+        </DropdownMenuItem>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add new transaction</DialogTitle>

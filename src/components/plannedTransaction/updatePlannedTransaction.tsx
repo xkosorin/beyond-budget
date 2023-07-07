@@ -6,11 +6,10 @@ import { plannedTransaction } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 type Props = {
-  children: React.ReactNode;
   uuid: string;
 };
 
-const UpdatePlannedTransaction = async ({ children, uuid }: Props) => {
+const UpdatePlannedTransaction = async ({ uuid }: Props) => {
   const transactionResult = await db.query.plannedTransaction.findFirst({
     where: eq(plannedTransaction.uuid, uuid),
   });
@@ -23,15 +22,21 @@ const UpdatePlannedTransaction = async ({ children, uuid }: Props) => {
     },
   });
 
+  const budgets = await db.query.budget.findMany({
+    columns: {
+      uuid: true,
+      title: true,
+    },
+  });
+
   return (
     <>
       {transactionResult && (
         <UpdatePlannedTransactionDialog
           transaction={transactionResult}
           categories={categories}
-        >
-          {children}
-        </UpdatePlannedTransactionDialog>
+          budgets={budgets}
+        />
       )}
     </>
   );

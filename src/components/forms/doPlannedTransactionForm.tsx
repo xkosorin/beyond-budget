@@ -37,7 +37,7 @@ type Inputs = z.infer<typeof doPlannedTransactionSchema>;
 type Props = {
   plannedTransaction: Pick<
     PlannedTransactionType,
-    "title" | "amount" | "isExpense" | "uuid"
+    "title" | "amount" | "isExpense" | "uuid" | "budgetUUID"
   > & { category: CategorySelect };
   doCloseDialog: () => void;
 };
@@ -58,6 +58,7 @@ const DoPlannedTransactionForm = ({
       amount: plannedTransaction.amount,
       plannedTransactionUUID: plannedTransaction.uuid,
       categoryUUID: plannedTransaction.category.uuid,
+      budgetUUID: plannedTransaction.budgetUUID || "",
     },
   });
 
@@ -91,7 +92,10 @@ const DoPlannedTransactionForm = ({
           control={form.control}
           name="categoryUUID"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex w-full items-center justify-start pt-2">
+              <FormLabel form="category" className="mt-2 w-48">
+                Category
+              </FormLabel>
               <FormControl>
                 <Select
                   name={field.name}
@@ -99,7 +103,7 @@ const DoPlannedTransactionForm = ({
                   onValueChange={field.onChange}
                   disabled={true}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="mt-0 w-full py-0">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -119,8 +123,8 @@ const DoPlannedTransactionForm = ({
             </FormItem>
           )}
         />
-        <FormLabel className="mt-6">Amount</FormLabel>
-        <div className="flex flex-row pt-2">
+        <div className="flex flex-row items-center space-y-2 pt-2">
+          <FormLabel className="w-[calc(12rem_+_20px)]">Amount</FormLabel>
           <FormField
             control={form.control}
             name="isExpense"
@@ -130,7 +134,7 @@ const DoPlannedTransactionForm = ({
                   <Toggle
                     variant="outline"
                     defaultPressed={true}
-                    className="rounded-e-none rounded-s-md px-4"
+                    className="rounded-e-none rounded-s-md border-e-0 px-4"
                     disabled={true}
                   >
                     {plannedTransaction.isExpense ? "-" : "+"}
@@ -150,7 +154,7 @@ const DoPlannedTransactionForm = ({
                     type="number"
                     pattern="[0-9]+([\.,][0-9]+)?"
                     step="0.01"
-                    className="rounded-s-none"
+                    className="mt-0 w-full rounded-s-none py-0"
                     {...form.register("amount", {
                       setValueAs: (v) => (v === "" ? undefined : parseFloat(v)),
                     })}
@@ -165,10 +169,12 @@ const DoPlannedTransactionForm = ({
           control={form.control}
           name="title"
           render={() => (
-            <FormItem className="w-full py-2">
-              <FormLabel form="title">Title</FormLabel>
+            <FormItem className="flex w-full items-center justify-start pt-2">
+              <FormLabel form="title" className="w-48">
+                Title
+              </FormLabel>
               <FormControl>
-                <Input {...form.register("title")} />
+                <Input className="w-full py-0" {...form.register("title")} />
               </FormControl>
               <FormMessage />
             </FormItem>
