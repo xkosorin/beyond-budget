@@ -8,11 +8,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { PlannedTransactionType } from "@/db/schema";
 import { CategorySelect } from "@/types";
-import { useState } from "react";
-import { DropdownMenuItem } from "./ui/dropdown-menu";
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 type Props = {
   transaction: Pick<
@@ -31,6 +31,7 @@ const DoPlannedTransactionDialog = ({ transaction }: Props) => {
           onSelect={(event) => {
             event.preventDefault();
           }}
+          className="flex gap-2"
         >
           <ArrowTopRightIcon /> Execute transaction
         </DropdownMenuItem>

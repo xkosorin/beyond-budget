@@ -1,6 +1,6 @@
 "use server";
 
-import AddCategoryForm from "../forms/addCategoryForm";
+import AddCategoryForm from "@/components/forms/addCategoryForm";
 
 const AddCategory = () => <AddCategoryForm />;
 

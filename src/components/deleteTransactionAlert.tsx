@@ -12,10 +12,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
-import { useTransition } from "react";
-import { DropdownMenuItem } from "./ui/dropdown-menu";
 import { TrashIcon } from "@radix-ui/react-icons";
+import { useTransition } from "react";
 
 type Props = {
   uuid: string;
@@ -47,6 +47,7 @@ const DeleteTransactionAlert = ({ uuid, isPlannedTransaction }: Props) => {
           onSelect={(event) => {
             event.preventDefault();
           }}
+          className="flex gap-2"
         >
           <TrashIcon /> Delete
         </DropdownMenuItem>

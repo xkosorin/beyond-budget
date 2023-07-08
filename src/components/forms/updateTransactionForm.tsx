@@ -212,6 +212,7 @@ const UpdateTransactionForm = ({
                   name={field.name}
                   value={field.value}
                   onValueChange={field.onChange}
+                  disabled={!transaction.isExpense}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a budget" />

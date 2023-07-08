@@ -8,12 +8,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TransactionType } from "@/db/schema";
 import { BudgetSelect, CategorySelect } from "@/types";
-import React, { useState } from "react";
-import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { Pencil1Icon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 type Props = {
   transaction: TransactionType;
@@ -35,6 +35,7 @@ const UpdateTransactionDialog = ({
           onSelect={(event) => {
             event.preventDefault();
           }}
+          className="flex gap-2"
         >
           <Pencil1Icon /> Edit transaction
         </DropdownMenuItem>

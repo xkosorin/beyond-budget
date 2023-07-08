@@ -19,7 +19,7 @@ export const metadata = {
     maximumScale: 1,
   },
   manifest: "/manifest.json",
-  themeColor: "#FFFFFF",
+  themeColor: "#09090B",
   applicationName: "Beyond Budget",
   appleWebApp: {
     capable: true,
