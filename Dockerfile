@@ -6,7 +6,7 @@ RUN npm install -g pnpm@latest
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm add sharp
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --prod --frozen-lockfile
 
 # If using yarn comment out above and use below instead
 # COPY package.json yarn.lock ./
