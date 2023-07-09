@@ -1,7 +1,8 @@
 "use server";
 
-import { Progress } from "@/components/ui/progress";
 import { BudgetType } from "@/db/schema";
+import { Progress } from "../ui/progress";
+import { cn } from "@/lib/utils";
 
 type Props = {
   budget: BudgetType;
@@ -18,7 +19,14 @@ const Budget = ({ budget }: Props) => {
           {budget.size - budget.spent} / {budget.size} €
         </span>
       </div>
-      <Progress value={value} />
+      <Progress
+        value={value}
+        progressColor={cn(
+          value > 60 && "bg-[#3FCF8E]",
+          value <= 60 && value > 20 && "bg-[#F6AE2D]",
+          value <= 20 && "bg-[#FF6369]"
+        )}
+      />
     </div>
   );
 };
