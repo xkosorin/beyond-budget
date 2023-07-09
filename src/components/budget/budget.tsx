@@ -11,12 +11,14 @@ const Budget = ({ budget }: Props) => {
   const value = Math.floor(((budget.size - budget.spent) / budget.size) * 100);
 
   return (
-    <div className="flex w-full flex-col items-start justify-between gap-4 py-2">
-      <div className="flex-shrink-0 gap-2 truncate">{budget.title}</div>
-      <div className="w-full min-w-[80px] whitespace-nowrap px-1 text-sm font-bold md:px-4 md:text-base xl:min-w-[120px]">
-        {budget.size - budget.spent} / {budget.size} €
-        <Progress value={value} />
+    <div className="flex w-full min-w-[80px] flex-col items-start justify-between whitespace-nowrap py-2 text-sm font-bold md:text-base xl:min-w-[120px]">
+      <div className="flex w-full flex-row justify-between">
+        <div className="flex-shrink-0 gap-2 truncate">{budget.title}</div>
+        <span className="self-end">
+          {budget.size - budget.spent} / {budget.size} €
+        </span>
       </div>
+      <Progress value={value} />
     </div>
   );
 };

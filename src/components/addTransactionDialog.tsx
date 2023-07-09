@@ -23,7 +23,7 @@ const AddTransactionDialog = ({ categories, budgets }: Props) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="fixed bottom-5 right-5 flex h-11 w-11 items-center justify-center rounded-full text-xl font-extrabold leading-[2.75rem] md:left-5 md:right-auto">
+      <DialogTrigger className="fixed bottom-5 right-5 flex h-11 w-11 items-center justify-center rounded-full bg-[#3FCF8E] text-xl font-extrabold leading-[2.75rem] md:left-5 md:right-auto">
         <PlusIcon />
       </DialogTrigger>
       <DialogContent>

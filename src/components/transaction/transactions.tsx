@@ -3,10 +3,15 @@
 import TransactionGroup from "@/components/transaction/transactionGroup";
 import { db } from "@/db";
 import { transaction } from "@/db/schema";
+import { cn } from "@/lib/utils";
 import { TransactionQuery } from "@/types";
 import { desc } from "drizzle-orm";
 
-const Transactions = async () => {
+type Props = {
+  className?: String;
+};
+
+const Transactions = async ({ className }: Props) => {
   const transactions: TransactionQuery[] = await db.query.transaction.findMany({
     with: {
       category: true,
@@ -31,18 +36,25 @@ const Transactions = async () => {
   );
 
   return (
-    <div className="w-full max-w-[calc(100vw_-_16px)] md:max-w-none">
+    <div
+      className={cn(
+        "h-full w-full max-w-[calc(100vw_-_16px)] flex-grow md:max-w-none",
+        className
+      )}
+    >
       <div className="scroll-m-20 text-2xl font-semibold tracking-tight">
         Transactions
       </div>
-      <div className="no-scrollbar flex max-h-[290px] flex-col gap-2 overflow-y-auto md:max-h-[calc(100vh_-_150px)]">
-        {Object.entries(groupedByDate).map(([date, transactions]) => (
-          <TransactionGroup
-            key={date}
-            date={date}
-            transactions={transactions}
-          />
-        ))}
+      <div className="h-[calc(100%_-_32px)] overflow-y-auto scrollbar-none">
+        <div className="flex flex-col gap-2">
+          {Object.entries(groupedByDate).map(([date, transactions]) => (
+            <TransactionGroup
+              key={date}
+              date={date}
+              transactions={transactions}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

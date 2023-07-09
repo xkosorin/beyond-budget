@@ -3,12 +3,17 @@
 import Budget from "@/components/budget/budget";
 import { db } from "@/db";
 import { BudgetType } from "@/db/schema";
+import { cn } from "@/lib/utils";
 
-const Budgets = async () => {
+type Props = {
+  className?: String;
+};
+
+const Budgets = async ({ className }: Props) => {
   const budgets: BudgetType[] = await db.query.budget.findMany();
 
   return (
-    <div className="max-w-[calc(100vw_-_16px)] md:max-w-none">
+    <div className={cn("max-w-[calc(100vw_-_16px)] md:max-w-none", className)}>
       <div className="scroll-m-20 text-2xl font-semibold tracking-tight">
         Budgets
       </div>
