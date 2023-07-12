@@ -11,9 +11,9 @@
     "migrate": "tsx src/db/migrate.ts"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.21.14",
+    "@clerk/nextjs": "^4.21.15",
     "@clerk/themes": "^1.7.5",
-    "@ducanh2912/next-pwa": "^9.1.4",
+    "@ducanh2912/next-pwa": "^9.2.1",
     "@hookform/resolvers": "^3.1.1",
     "@neondatabase/serverless": "^0.4.26",
     "@radix-ui/react-alert-dialog": "^1.0.4",
@@ -39,8 +39,8 @@
     "clsx": "^1.2.1",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
-    "drizzle-kit": "^0.19.3",
-    "drizzle-orm": "^0.27.0",
+    "drizzle-kit": "^0.19.4",
+    "drizzle-orm": "^0.27.2",
     "drizzle-zod": "^0.4.4",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
@@ -61,7 +61,8 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "prettier": "2.8.8",
-    "prettier-plugin-tailwindcss": "^0.3.0"
+    "prettier": "3.0.0",
+    "prettier-plugin-organize-attributes": "^0.0.5",
+    "prettier-plugin-tailwindcss": "^0.4.0"
   }
 }
