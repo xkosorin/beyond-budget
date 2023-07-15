@@ -13,7 +13,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 export async function addTransactionAction(
-  input: z.infer<typeof transactionSchema>
+  input: z.infer<typeof transactionSchema>,
 ) {
   const budgetInput = input.budgetUUID === "" ? null : input.budgetUUID;
 
@@ -35,7 +35,7 @@ export async function addTransactionAction(
     await db.insert(plannedTransaction).values({
       categoryUUID: input.categoryUUID,
       budgetUUID: budgetInput,
-      amount: input.amount,
+      amount: input.amount.toString(),
       title: input.title,
       isExpense: input.expenseSchema.isExpense,
       dueDate: input.expenseSchema.plannedSchema.dueDate.toDateString(),
@@ -49,7 +49,7 @@ export async function addTransactionAction(
   //Add transaction
   await db.insert(transaction).values({
     categoryUUID: input.categoryUUID,
-    amount: input.amount,
+    amount: input.amount.toString(),
     budgetUUID: budgetInput,
     title: input.title,
     isExpense: input.expenseSchema?.isExpense,
@@ -60,7 +60,7 @@ export async function addTransactionAction(
 }
 
 export async function deleteTransactionAction(
-  input: z.infer<typeof getTransactionSchema>
+  input: z.infer<typeof getTransactionSchema>,
 ) {
   if (input.isPlannedTransaction) {
     await db
@@ -76,7 +76,7 @@ export async function deleteTransactionAction(
 export async function doPlannedTransactionAction(
   input: z.infer<typeof doPlannedTransactionSchema> & {
     plannedTransactionUUID: string;
-  }
+  },
 ) {
   const budgetInput = input.budgetUUID === "" ? null : input.budgetUUID;
 
@@ -106,7 +106,7 @@ export async function doPlannedTransactionAction(
 
   await db.insert(transaction).values({
     categoryUUID: input.categoryUUID,
-    amount: input.amount,
+    amount: input.amount.toString(),
     title: input.title,
     budgetUUID: budgetInput,
     isExpense: input.isExpense,
@@ -119,7 +119,7 @@ export async function doPlannedTransactionAction(
 export async function updateTransactionAction(
   input: z.infer<typeof transactionSchema> & {
     uuid: string;
-  }
+  },
 ) {
   const transactionResult = await db.query.transaction.findFirst({
     where: eq(transaction.uuid, input.uuid),
@@ -151,7 +151,7 @@ export async function updateTransactionAction(
     .update(transaction)
     .set({
       categoryUUID: input.categoryUUID,
-      amount: input.amount,
+      amount: input.amount.toString(),
       budgetUUID: budgetInput,
       title: input.title,
     })
@@ -164,7 +164,7 @@ export async function updateTransactionAction(
 export async function updatePlannedTransactionAction(
   input: z.infer<typeof updatePlannedTransactionSchema> & {
     uuid: string;
-  }
+  },
 ) {
   const transactionResult = await db.query.plannedTransaction.findFirst({
     where: eq(plannedTransaction.uuid, input.uuid),
@@ -196,7 +196,7 @@ export async function updatePlannedTransactionAction(
     .update(plannedTransaction)
     .set({
       categoryUUID: input.categoryUUID,
-      amount: input.amount,
+      amount: input.amount.toString(),
       title: input.title,
       budgetUUID: budgetInput,
       isExpense: input.isExpense,
