@@ -15,9 +15,9 @@ const TransactionGroup = ({ transactions, date }: Props) => {
   const cumulativeAmount = transactions
     .reduce((sum, transaction) => {
       if (transaction.isExpense) {
-        return sum - transaction.amount;
+        return sum - Number(transaction.amount);
       }
-      return sum + transaction.amount;
+      return sum + Number(transaction.amount);
     }, 0)
     .toFixed(2);
 
@@ -32,7 +32,7 @@ const TransactionGroup = ({ transactions, date }: Props) => {
               className={cn(
                 "font-bold",
                 parseFloat(cumulativeAmount) < 0 && "text-[#FF6369]",
-                parseFloat(cumulativeAmount) > 0 && "text-[#3FCF8E]"
+                parseFloat(cumulativeAmount) > 0 && "text-[#3FCF8E]",
               )}
             >
               {cumulativeAmount} €
