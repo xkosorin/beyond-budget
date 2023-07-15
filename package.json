@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "generate": "drizzle-kit generate:pg",
-    "migrate": "tsx src/db/migrate.ts",
+    "migrate": "dotenv -e .env.local tsx src/db/migrate.ts",
     "studio": "dotenv -e .env.local pnpm drizzle-kit studio"
   },
   "dependencies": {

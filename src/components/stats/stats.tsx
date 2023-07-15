@@ -29,13 +29,13 @@ const Stats = async ({ className }: Props) => {
         <small className="text-base font-medium leading-none">
           Incomes:{" "}
           <span className="font-bold text-[#3FCF8E]">
-            {incomes[0].amount ? incomes[0].amount.toFixed(2) : "0"} €
+            {incomes[0].amount ? incomes[0].amount : "0"} €
           </span>
         </small>
         <small className="text-base font-medium leading-none">
           Expenses:{" "}
           <span className="font-bold text-[#FF6369]">
-            {expenses[0].amount.toFixed(2)} €
+            {expenses[0].amount} €
           </span>
         </small>
       </div>

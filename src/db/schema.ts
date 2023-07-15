@@ -2,10 +2,10 @@ import { InferModel, relations } from "drizzle-orm";
 import {
   boolean,
   date,
+  numeric,
   pgEnum,
   pgTable,
   primaryKey,
-  real,
   smallint,
   text,
   timestamp,
@@ -14,7 +14,7 @@ import {
 
 export const transaction = pgTable("transaction", {
   uuid: uuid("uuid").defaultRandom().notNull().primaryKey(),
-  amount: real("amount").default(0.0).notNull(),
+  amount: numeric("amount", { precision: 12, scale: 2 }).default("0").notNull(),
   isExpense: boolean("is_expense").default(true).notNull(),
   title: text("title").notNull(),
   categoryUUID: uuid("category_uuid")
@@ -22,7 +22,7 @@ export const transaction = pgTable("transaction", {
     .references(() => category.uuid),
   budgetUUID: uuid("budget_uuid").references(() => budget.uuid),
   plannedTransactionUUID: uuid("planned_transaction_uuid").references(
-    () => plannedTransaction.uuid
+    () => plannedTransaction.uuid,
   ),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
@@ -60,7 +60,7 @@ export const categoryRelations = relations(category, ({ many }) => ({
 
 export const plannedTransaction = pgTable("planned_transaction", {
   uuid: uuid("uuid").defaultRandom().notNull().primaryKey(),
-  amount: real("amount").default(0.0).notNull(),
+  amount: numeric("amount", { precision: 12, scale: 2 }).default("0").notNull(),
   isExpense: boolean("is_expense").default(true).notNull(),
   frequecny: smallint("frequency").default(1).notNull(),
   occurrencesThisMonth: smallint("occurrences_this_month").default(0).notNull(),
@@ -84,14 +84,14 @@ export const plannedTransactionRelations = relations(
       fields: [plannedTransaction.budgetUUID],
       references: [budget.uuid],
     }),
-  })
+  }),
 );
 
 export const budget = pgTable("budget", {
   uuid: uuid("uuid").defaultRandom().notNull().primaryKey(),
   title: text("title").notNull(),
-  size: real("size").default(0.0).notNull(),
-  spent: real("spent").default(0.0).notNull(),
+  size: numeric("size", { precision: 12, scale: 2 }).default("0").notNull(),
+  spent: numeric("spent", { precision: 12, scale: 2 }).default("0").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -121,7 +121,7 @@ export const labelToTransaction = pgTable(
   },
   (t) => ({
     pk: primaryKey(t.labelUUID, t.transactionUUID),
-  })
+  }),
 );
 
 export const labelToTransactionRelations = relations(
@@ -135,7 +135,7 @@ export const labelToTransactionRelations = relations(
       fields: [labelToTransaction.transactionUUID],
       references: [transaction.uuid],
     }),
-  })
+  }),
 );
 
 export type TransactionType = InferModel<typeof transaction>;
