@@ -66,7 +66,7 @@ const UpdatePlannedTransactionForm = ({
     resolver: zodResolver(updatePlannedTransactionSchema),
     defaultValues: {
       categoryUUID: transaction.categoryUUID,
-      amount: transaction.amount,
+      amount: Number(transaction.amount),
       title: transaction.title,
       isExpense: transaction.isExpense,
       frequency: transaction.frequecny,

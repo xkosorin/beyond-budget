@@ -56,7 +56,7 @@ const UpdateTransactionForm = ({
     defaultValues: {
       categoryUUID: transaction.categoryUUID,
       budgetUUID: transaction.budgetUUID || "",
-      amount: transaction.amount,
+      amount: Number(transaction.amount),
       title: transaction.title,
       isExpense: transaction.isExpense,
     },
@@ -113,7 +113,7 @@ const UpdateTransactionForm = ({
                         ? categories
                             .filter(
                               (cat) =>
-                                cat.type === "either" || cat.type === "expense"
+                                cat.type === "either" || cat.type === "expense",
                             )
                             .map((cat) => (
                               <SelectItem value={cat.uuid} key={cat.uuid}>
@@ -123,7 +123,7 @@ const UpdateTransactionForm = ({
                         : categories
                             .filter(
                               (cat) =>
-                                cat.type === "either" || cat.type === "income"
+                                cat.type === "either" || cat.type === "income",
                             )
                             .map((cat) => (
                               <SelectItem value={cat.uuid} key={cat.uuid}>

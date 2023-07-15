@@ -54,7 +54,7 @@ const DoPlannedTransactionForm = ({
     resolver: zodResolver(doPlannedTransactionSchema),
     defaultValues: {
       title: plannedTransaction.title,
-      amount: plannedTransaction.amount,
+      amount: Number(plannedTransaction.amount),
       plannedTransactionUUID: plannedTransaction.uuid,
       categoryUUID: plannedTransaction.category.uuid,
       budgetUUID: plannedTransaction.budgetUUID || "",
