@@ -123,7 +123,7 @@ WHEN (NEW.planned_transaction_uuid IS NOT NULL)
 EXECUTE FUNCTION update_occurrences_this_month();
 ```
 
-### Function to update occurrenced this month in planned transaction table on transaction delete
+### Function to update occurrences this month in planned transaction table on transaction delete
 ```
 CREATE FUNCTION decrease_occurrences_this_month()
   RETURNS TRIGGER AS $$
@@ -137,11 +137,38 @@ END;
 $$ LANGUAGE plpgsql;
 ```
 
-### Trigger to update occurrenced this month in planned transaction table on transaction delete
+### Trigger to update occurrences this month in planned transaction table on transaction delete
 ```
 CREATE TRIGGER trigger_decrease_occurrences_this_month
 AFTER DELETE ON transaction
 FOR EACH ROW
 WHEN (OLD.planned_transaction_uuid IS NOT NULL)
 EXECUTE FUNCTION decrease_occurrences_this_month();
+```
+
+### Function to updated `is_Paid` in planned transaction table when occurrences equals frequency
+```
+CREATE OR REPLACE FUNCTION update_paid_status()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Check if occurences_this_month equals frequency
+  IF NEW.occurences_this_month = NEW.frequency THEN
+    -- Set the paid column to true
+    NEW.paid = true;
+  ELSE
+    -- Set the paid column to false
+    NEW.paid = false;
+  END IF;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+### Trigger to updated `is_Paid` in planned transaction table when occurrences equals frequency
+```
+CREATE TRIGGER update_paid_trigger
+BEFORE INSERT OR UPDATE ON planned_transactions
+FOR EACH ROW
+EXECUTE FUNCTION update_paid_status();
 ```

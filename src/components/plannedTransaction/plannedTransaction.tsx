@@ -25,7 +25,8 @@ const PlannedTransaction = ({ transaction }: Props) => {
           {transaction.title}
         </div>
       </div>
-      <div className="whitespace-nowrap px-1 text-sm md:px-4 md:text-base md:font-bold">
+      <div className="flex flex-row gap-2 whitespace-nowrap px-1 text-sm md:px-4 md:text-base md:font-bold">
+        {transaction.paid && <span className="text-[#3FCF8E]">PAID</span>}
         {transaction.frequecny + "x"}
       </div>
       <div className="ml-auto w-fit min-w-[80px] whitespace-nowrap px-1 text-right text-sm font-bold md:px-4 md:text-base xl:min-w-[120px]">
