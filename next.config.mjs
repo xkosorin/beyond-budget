@@ -1,5 +1,5 @@
 await import("./src/env.mjs");
-import withPWAInit from "@ducanh2912/next-pwa";
+import withPWAInit from "@imbios/next-pwa";
 
 const withPWA = withPWAInit({
   dest: "public",
